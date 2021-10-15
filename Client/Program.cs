@@ -2,6 +2,8 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using ServerCore;
+using System.Threading;
 
 namespace Client
 {
@@ -14,18 +16,17 @@ namespace Client
      
             try
             {
-                byte[] recvBuffer = new byte[1024];
-                int recvSize = clientSocket.Receive(recvBuffer);
-                string recvData = Encoding.UTF8.GetString(recvBuffer, 0, recvSize);
-                Console.WriteLine(recvData);
+                //session 초기화
+                Session session = new Session();
+                session.Initialize(clientSocket);
 
                 //보낸다
-                //문자열-> data
                 byte[] sendBuffer = Encoding.UTF8.GetBytes("오랜만이시네요.");
-                clientSocket.Send(sendBuffer);
+                session.Send(sendBuffer);
 
-                clientSocket.Shutdown(SocketShutdown.Both);
-                clientSocket.Close();
+                Thread.Sleep(100);
+
+                session.Disconnect();
             }
             catch (Exception e)
             {
