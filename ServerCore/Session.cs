@@ -1,26 +1,36 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading; // 사용
+using System.Threading;
+using System.Collections.Generic;
 
 namespace ServerCore
 {
     public class Session
     {
         Socket socket;
-
-        //종료 flag
         int disconnected = 0;
+
+        SocketAsyncEventArgs receiveArgs = new SocketAsyncEventArgs();
+        SocketAsyncEventArgs sendArgs = new SocketAsyncEventArgs();
+
+        Queue<byte[]> sendQueue = new Queue<byte[]>();
+        bool isProgressing = false;
+
+        object lockObj = new object();
+        List<ArraySegment<byte>> sendList = new List<ArraySegment<byte>>();
 
         public void Initialize(Socket _socket)
         {
             this.socket = _socket;
 
-            SocketAsyncEventArgs receiveArgs = new SocketAsyncEventArgs();
             receiveArgs.Completed += ReceiveCompleted;
+            sendArgs.Completed += SendCompleted;
 
             receiveArgs.SetBuffer(new byte[1024], 0, 1024);
             RegistReceive(receiveArgs);
+
+
         }
 
         void RegistReceive(SocketAsyncEventArgs args)
@@ -49,22 +59,81 @@ namespace ServerCore
                     Console.WriteLine(e.Message);
                 }
             }
-            else 
+            else
             {
                 Disconnect();
             }
-            
+
         }
 
         public void Send(byte[] sendBuffer)
         {
-            socket.Send(sendBuffer);
+            lock (lockObj)
+            {
+                sendQueue.Enqueue(sendBuffer);
+
+                if (!isProgressing)
+                {
+                    isProgressing = true;
+                    RegistSend(sendArgs);
+                }
+            }
+
+
+        }
+
+        void RegistSend(SocketAsyncEventArgs args)
+        {
+            while (sendQueue.Count > 0)
+            {
+                byte[] sendBuffer = sendQueue.Dequeue();
+                sendList.Add(new ArraySegment<byte>(sendBuffer, 0, sendBuffer.Length));
+            }
+
+            args.BufferList = sendList;
+
+            bool pennding = socket.SendAsync(args);
+
+            if (pennding == false)
+            {
+                SendCompleted(null, args);
+            }
+        }
+
+        void SendCompleted(object sender, SocketAsyncEventArgs args)
+        {
+            lock (lockObj)
+            {
+                if (args.SocketError == SocketError.Success && args.BytesTransferred > 0)
+                {
+                    try
+                    {
+                        args.BufferList = null;
+                        sendList.Clear();
+
+                        if (sendQueue.Count > 0)
+                        {
+                            RegistSend(args);
+                        }
+                        else
+                        {
+                            isProgressing = false;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                }
+                else
+                {
+                    Disconnect();
+                }
+            }
         }
 
         public void Disconnect()
         {
-            //Interlocked.Exchange 반환되는데 ref 변수가 원래 가지고 있는값
-            //Interlocked.Exchange(ref 변수, 바꾸고 싶은값)
             if (Interlocked.Exchange(ref disconnected, 1) == 0)
             {
                 socket.Shutdown(SocketShutdown.Both);
@@ -72,6 +141,5 @@ namespace ServerCore
             }
 
         }
-
     }
 }

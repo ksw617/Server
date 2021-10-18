@@ -10,17 +10,14 @@ namespace Client
     class Program
     {
         static Connector connector;
-
         static void ConnectdHandler(Socket clientSocket)
         {
      
             try
             {
-                //session 초기화
                 Session session = new Session();
                 session.Initialize(clientSocket);
 
-                //보낸다
                 byte[] sendBuffer = Encoding.UTF8.GetBytes("오랜만이시네요.");
                 session.Send(sendBuffer);
 
