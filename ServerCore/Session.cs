@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using System.Collections.Generic;
 
 namespace ServerCore
 {
-    public class Session
+    public abstract class Session
     {
         Socket socket;
         int disconnected = 0;
@@ -14,11 +14,16 @@ namespace ServerCore
         SocketAsyncEventArgs receiveArgs = new SocketAsyncEventArgs();
         SocketAsyncEventArgs sendArgs = new SocketAsyncEventArgs();
 
-        Queue<byte[]> sendQueue = new Queue<byte[]>();
-        bool isProgressing = false;
+        Queue<ArraySegment<byte>> sendQueue = new Queue<ArraySegment<byte>>();
 
+        bool isProgressing = false;
         object lockObj = new object();
         List<ArraySegment<byte>> sendList = new List<ArraySegment<byte>>();
+
+        public abstract void OnConnected(EndPoint endPoint);
+        public abstract void OnReceive(ArraySegment<byte> buffer);
+        public abstract void OnSend(int numberOfBytes);
+        public abstract void OnDisconnected(EndPoint endPoint);
 
         public void Initialize(Socket _socket)
         {
@@ -49,8 +54,7 @@ namespace ServerCore
             {
                 try
                 {
-                    string recvData = Encoding.UTF8.GetString(args.Buffer, args.Offset, args.BytesTransferred);
-                    Console.WriteLine(recvData);
+                    OnReceive(new ArraySegment<byte>(args.Buffer, args.Offset, args.BytesTransferred));
 
                     RegistReceive(args);
                 }
@@ -66,7 +70,7 @@ namespace ServerCore
 
         }
 
-        public void Send(byte[] sendBuffer)
+        public void Send(ArraySegment<byte> sendBuffer)
         {
             lock (lockObj)
             {
@@ -86,8 +90,7 @@ namespace ServerCore
         {
             while (sendQueue.Count > 0)
             {
-                byte[] sendBuffer = sendQueue.Dequeue();
-                sendList.Add(new ArraySegment<byte>(sendBuffer, 0, sendBuffer.Length));
+                sendList.Add(sendQueue.Dequeue());
             }
 
             args.BufferList = sendList;
@@ -110,6 +113,8 @@ namespace ServerCore
                     {
                         args.BufferList = null;
                         sendList.Clear();
+
+                        OnSend(args.BytesTransferred);
 
                         if (sendQueue.Count > 0)
                         {
@@ -136,6 +141,8 @@ namespace ServerCore
         {
             if (Interlocked.Exchange(ref disconnected, 1) == 0)
             {
+                OnDisconnected(socket.RemoteEndPoint);
+
                 socket.Shutdown(SocketShutdown.Both);
                 socket.Close();
             }

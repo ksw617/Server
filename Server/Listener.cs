@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using ServerCore;
 
 namespace Server
 {
     class Listener
     {
         Socket listenSocket;
+        Func<Session> sessionFactory;
 
-        Action<Socket> AcceptHandler;
-
-        public void Initialize(IPEndPoint iPEndPoint, Action<Socket> action)
+        public void Initialize(IPEndPoint iPEndPoint, Func<Session> session)
         {
+            sessionFactory += session;
+
             listenSocket = new Socket(iPEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             listenSocket.Bind(iPEndPoint);
             listenSocket.Listen(10);
-
-            AcceptHandler = action;
 
             SocketAsyncEventArgs args = new SocketAsyncEventArgs();
             args.Completed += AcceptCompleted;
@@ -40,8 +40,10 @@ namespace Server
         {
             if (args.SocketError == SocketError.Success)
             {
-
-                AcceptHandler.Invoke(args.AcceptSocket);
+                Session session = sessionFactory.Invoke();
+                session.Initialize(args.AcceptSocket);
+                session.OnConnected(args.AcceptSocket.RemoteEndPoint);
+               
             }
             else 
             {
