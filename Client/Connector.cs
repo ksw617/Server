@@ -10,6 +10,7 @@ namespace Client
         Func<Session> sessionFactory;
         public void Initialize(IPEndPoint iPEndPoint, Func<Session> session)
         {
+
             sessionFactory += session;
 
             Socket clientSocket = new Socket(iPEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);

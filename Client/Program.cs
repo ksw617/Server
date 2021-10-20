@@ -15,7 +15,10 @@ namespace Client
 
             connector.Initialize(iPEndPoint, () => { return new ServerSession(); });
 
-            Thread.Sleep(5000);
+            while (true)
+            {
+                
+            }
         }
     }
 }

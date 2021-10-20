@@ -10,18 +10,22 @@ namespace Server
         Socket listenSocket;
         Func<Session> sessionFactory;
 
-        public void Initialize(IPEndPoint iPEndPoint, Func<Session> session)
+        public void Initialize(IPEndPoint iPEndPoint, Func<Session> session, int backlog = 100, int acceptCount = 10)
         {
             sessionFactory += session;
 
             listenSocket = new Socket(iPEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             listenSocket.Bind(iPEndPoint);
-            listenSocket.Listen(10);
+            //대기자
+            listenSocket.Listen(backlog);
 
-            SocketAsyncEventArgs args = new SocketAsyncEventArgs();
-            args.Completed += AcceptCompleted;
-            RegistAccept(args);
-
+            //처리자
+            for (int i = 0; i < acceptCount; i++)
+            {
+                SocketAsyncEventArgs args = new SocketAsyncEventArgs();
+                args.Completed += AcceptCompleted;
+                RegistAccept(args);
+            }
         }
 
         void RegistAccept(SocketAsyncEventArgs args)
