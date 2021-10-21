@@ -27,3 +27,4 @@ C:\Users\Administrator\Desktop\Server\Server\obj\Debug\netcoreapp3.1\Server.cspr
 C:\Users\Administrator\Desktop\Server\Server\obj\Debug\netcoreapp3.1\Server.dll
 C:\Users\Administrator\Desktop\Server\Server\obj\Debug\netcoreapp3.1\Server.pdb
 C:\Users\Administrator\Desktop\Server\Server\obj\Debug\netcoreapp3.1\Server.genruntimeconfig.cache
+C:\Users\Administrator\Desktop\Server\Server\bin\Debug\netcoreapp3.1\Google.Protobuf.dll

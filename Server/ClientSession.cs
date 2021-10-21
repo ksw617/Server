@@ -3,10 +3,12 @@ using System.Net;
 using ServerCore;
 using System.Text;
 using System.Threading;
+using Google.Protobuf; // 사용
+using Google.Protobuf.Examples.AddressBook; // 사용
 
 namespace Server
 {
-    class ClientSession : Session
+    class ClientSession : PacketSession
     {
         public override void OnConnected(EndPoint endPoint)
         {
@@ -19,14 +21,20 @@ namespace Server
             Thread.Sleep(3000);
             Disconnect();
         }
- 
-        public override int OnReceive(ArraySegment<byte> buffer)
+
+        public override void OnReceivePacket(ArraySegment<byte> buffer)
         {
-            string recvData = Encoding.UTF8.GetString(buffer.Array, buffer.Offset, buffer.Count);
-            Console.WriteLine(recvData);
-           
-            //지금은 그냥 읽은 만큼 반환
-            return buffer.Count;
+
+            //앞부분 사이즈를 받아와서
+            ushort size = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
+
+            Person person = new Person();
+            ArraySegment<byte> packet = new ArraySegment<byte>(buffer.Array, buffer.Offset + 2, size - 2);
+            person.MergeFrom(packet);
+
+            //확인
+            Console.WriteLine($"Name : {person.Name}, Email : {person.Email}");
+
         }
 
         public override void OnSend(int numberOfBytes)
