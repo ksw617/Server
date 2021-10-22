@@ -1,1 +1,1 @@
-protoc -I=./ --csharp_out=./ ./addressbook.proto
+protoc -I=./ --csharp_out=./ ./Protobuf.proto
