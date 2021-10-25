@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "Yv4Uzm3A4aDpKqh0Vyt5miSl5ST6uduaCVlopnEp40mqVUazJXtD4bVz+R7PxGRS291SQOa7nwRChNw+Cdi1Dw==",
+  "dgSpecHash": "G/4TdsfsnMC3PM1NQ9xokP7QnYIo/kYzvDXkzi+PhVFtbzcEX/D8E7KrIlVzCR1atg6Oqmib1F9V6I6asZTi3w==",
   "success": true,
   "projectFilePath": "C:\\Users\\Administrator\\Desktop\\Server\\ServerCore\\ServerCore.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Administrator\\.nuget\\packages\\google.protobuf\\3.19.0\\google.protobuf.3.19.0.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.5.2\\system.runtime.compilerservices.unsafe.4.5.2.nupkg.sha512"
+  ],
   "logs": []
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net;
 using ServerCore;
-using Google.Protobuf;
 using Google.Protobuf.Protocol;
 
 namespace Client
@@ -15,16 +14,7 @@ namespace Client
             C_Chat chat = new C_Chat();
             chat.Chat = "Hello Server";
 
-            ushort size = (ushort)chat.CalculateSize();
-            ushort id = (ushort)MsgID.CChat;
-            byte[] sendBuffer = new byte[size + 4];
-
-            Array.Copy(BitConverter.GetBytes(size + 4), 0, sendBuffer, 0, sizeof(ushort));
-            Array.Copy(BitConverter.GetBytes(id), 0, sendBuffer, 2, sizeof(ushort));
-            Array.Copy(chat.ToByteArray(), 0, sendBuffer, 4, size);
-           
-
-            Send(new ArraySegment<byte>(sendBuffer));
+            Send(chat);
 
         }
 

@@ -36,6 +36,9 @@
       "ServerCore/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
+        "dependencies": {
+          "Google.Protobuf": "3.19.0"
+        },
         "compile": {
           "bin/placeholder/ServerCore.dll": {}
         },
