@@ -12,6 +12,8 @@ class ClientPacketManager : PacketManager
     {
         onRecv.Add((ushort)MsgID.SChat, MakePacket<S_Chat>);
         handler.Add((ushort)MsgID.SChat, ClientPacketHandler.S_ChatHandler);
+        onRecv.Add((ushort)MsgID.SMove, MakePacket<S_Move>);
+        handler.Add((ushort)MsgID.SMove, ClientPacketHandler.S_MoveHandler);
 
     }
 
@@ -19,7 +21,6 @@ class ClientPacketManager : PacketManager
     {
         T packet = new T();
         packet.MergeFrom(buffer.Array, buffer.Offset + 4, buffer.Count - 4);
-
         PacketQueue.Instance.Push(id, packet);
     }
 

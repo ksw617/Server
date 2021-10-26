@@ -11,11 +11,6 @@ namespace Server
         {
             Console.WriteLine($"OnConnected : {endPoint}");
 
-            S_Chat s_Chat = new S_Chat();
-            s_Chat.Chat = "This is Server";
-
-            Send(s_Chat);
-
         }
 
         public override void OnReceivePacket(ArraySegment<byte> buffer)

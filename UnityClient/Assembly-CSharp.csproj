@@ -53,16 +53,16 @@
     <UnityVersion>2021.1.20f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\ServerCore\Protobuf.cs" />
-    <Compile Include="Assets\Scripts\ServerCore\PacketManager.cs" />
-    <Compile Include="Assets\Scripts\ServerCore\Session.cs" />
     <Compile Include="Assets\Scripts\ServerCore\RecvBuffer.cs" />
-    <Compile Include="Assets\Scripts\ServerCore\PacketSession.cs" />
+    <Compile Include="Assets\Scripts\ServerCore\PacketManager.cs" />
+    <Compile Include="Assets\Scripts\ServerCore\Protobuf.cs" />
     <Compile Include="Assets\Scripts\Network\Connector.cs" />
+    <Compile Include="Assets\Scripts\ServerCore\Session.cs" />
     <Compile Include="Assets\Scripts\Network\ServerSession.cs" />
+    <Compile Include="Assets\Scripts\ServerCore\PacketSession.cs" />
     <Compile Include="Assets\Scripts\Network\ClientPacketManager.cs" />
-    <Compile Include="Assets\Scripts\Network\ClientPacketHandler.cs" />
     <Compile Include="Assets\NetworkManager.cs" />
+    <Compile Include="Assets\Scripts\Network\ClientPacketHandler.cs" />
     <Compile Include="Assets\Scripts\Network\PacketQueue.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -303,20 +303,20 @@
     <Reference Include="UnityEditor.UnityConnectModule">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2021.1.20f1\Editor\Data\Managed\UnityEngine\UnityEditor.UnityConnectModule.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
-      <HintPath>Library\PackageCache\com.unity.visualscripting@1.6.1\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
+    <Reference Include="System.Buffers">
+      <HintPath>Assets\Libs\System.Buffers.dll</HintPath>
     </Reference>
     <Reference Include="Google.Protobuf">
       <HintPath>Assets\Libs\Google.Protobuf.dll</HintPath>
     </Reference>
-    <Reference Include="System.Memory">
-      <HintPath>Assets\Libs\System.Memory.dll</HintPath>
-    </Reference>
     <Reference Include="System.Runtime.CompilerServices.Unsafe">
       <HintPath>Assets\Libs\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
-    <Reference Include="System.Buffers">
-      <HintPath>Assets\Libs\System.Buffers.dll</HintPath>
+    <Reference Include="System.Memory">
+      <HintPath>Assets\Libs\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
+      <HintPath>Library\PackageCache\com.unity.visualscripting@1.6.1\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2021.1.20f1\Editor\Data\NetStandard\ref\2.0.0\netstandard.dll</HintPath>

@@ -9,8 +9,16 @@ class ClientPacketHandler
         S_Chat chat = packet as S_Chat;
         ServerSession serverSession = session as ServerSession;
 
+        Debug.Log(chat.Msg);
+
+    }
+
+    public static void S_MoveHandler(PacketSession session, IMessage packet)
+    {
+        S_Move move = packet as S_Move;
+        ServerSession serverSession = session as ServerSession;
+
         Debug.Log("work");
 
-        NetworkManager.Instance.CreateBox();
     }
 }

@@ -1,6 +1,5 @@
 using Google.Protobuf;
 using System.Collections.Generic;
-
 public class Packet
 {
     public ushort Id { get; set; }
@@ -40,3 +39,4 @@ public class PacketQueue
         return list;
     }
 }
+

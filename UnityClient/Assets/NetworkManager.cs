@@ -4,37 +4,10 @@ using UnityEngine;
 using System.Collections.Generic;
 using ServerCore;
 using Google.Protobuf;
-using Google.Protobuf.Protocol;
 
 public class NetworkManager : MonoBehaviour
 {
-    static NetworkManager instance = null;
-    public static NetworkManager Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = FindObjectOfType<NetworkManager>();
-            }
-
-            return instance;
-        }
-      
-    }
-
-
-    ServerSession serverSession = new ServerSession();
-    public GameObject obj;
-
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-
-    }
+    private ServerSession serverSession = new ServerSession();
     void Start()
     {
         string host = Dns.GetHostName();
@@ -44,10 +17,10 @@ public class NetworkManager : MonoBehaviour
 
         Connector connector = new Connector();
         connector.Initialize(iPEndPoint, () => { return serverSession; });
-
+        
     }
 
-    public void Update()
+    private void Update()
     {
         List<Packet> list = PacketQueue.Instance.PopAll();
         foreach (Packet packet in list)
@@ -58,11 +31,6 @@ public class NetworkManager : MonoBehaviour
                 handler.Invoke(serverSession, packet.Message);
             }
         }
-        
     }
 
-    public void CreateBox()
-    {
-        Instantiate(obj);
-    }
 }

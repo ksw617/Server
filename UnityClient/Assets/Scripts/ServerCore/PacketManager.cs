@@ -16,6 +16,7 @@ namespace ServerCore
 
         public abstract void Initialize();
 
+        //
         public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
         {
             ushort id = BitConverter.ToUInt16(buffer.Array, buffer.Offset + sizeof(ushort));
@@ -23,7 +24,8 @@ namespace ServerCore
             Action<ushort, PacketSession, ArraySegment<byte>> action = null;
 
             if (onRecv.TryGetValue(id, out action))
-            {
+            {                                     //buffer : [size(2)][id(2)][S_Chat....]  // packet : [s_Chat...]       
+                //action call -> MakePacket<>(id, session, buffer) ->  ClientPacketHandler.S_ChatHandler(session, packet)
                 action.Invoke(id, session, buffer);
             }
         }

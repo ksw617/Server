@@ -10,9 +10,11 @@ namespace Server
 
         public override void Initialize()
         {
-            onRecv.Add((ushort)MsgID.CChat, MakePacket<C_Chat>);
-            handler.Add((ushort)MsgID.CChat, ServerPacketHandler.C_ChatHandler);
-            
+            onRecv.Add((ushort)MsgID.CEnter, MakePacket<C_Enter>);
+            handler.Add((ushort)MsgID.CEnter, ServerPacketHandler.C_EnterHandler);
+            onRecv.Add((ushort)MsgID.CMove, MakePacket<C_Move>);
+            handler.Add((ushort)MsgID.CMove, ServerPacketHandler.C_MoveHandler);
+
         }
     }
 }
