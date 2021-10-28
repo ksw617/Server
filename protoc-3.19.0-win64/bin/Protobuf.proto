@@ -7,41 +7,33 @@ option csharp_namespace = "Google.Protobuf.Protocol";
 
 enum MsgID
 {
-	C_ENTER = 0;
-	S_CHAT = 1;
-	C_MOVE = 2;
-	S_MOVE = 3;
+	S_CONNECTED = 0;
+	C_CREATE_PLAYER = 1;
+	S_ENTER = 2;
+	C_ENTER_GAMEROOM = 3;
 }
 
-message C_Enter
+message S_Connected
+{
+}
+
+message C_CreatePlayer
 {
 	PlayerInfo playerInfo = 1;
-
 }
-message S_Chat
+
+message S_Enter
 {
-	string msg = 1;
+
 }
 
-message C_Move
+message C_EnterGameRoom
 {
-	PositionInfo pos = 1;
+
 }
 
-message S_Move
+message PlayerInfo
 {
-	PlayerInfo playerInfo = 1;
-	PositionInfo pos = 2;
-}
-
-message PlayerInfo {
-
-  int32 playerId = 1;
-  string name = 2;
-}
-
-message PositionInfo
-{
-  int32 posX = 1;
-  int32 posY = 2;
+	string name = 1;
+	int32 modelIndex = 2;
 }

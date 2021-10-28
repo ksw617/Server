@@ -1,35 +1,36 @@
 ﻿using System;
 using System.Net;
 using ServerCore;
+using Google.Protobuf;
 using Google.Protobuf.Protocol;
 
-namespace Client
+
+namespace Server
 {
-    class ServerSession : PacketSession
+    class ClientSession : PacketSession
     {
+        public int SessionID { get; set; }
         public override void OnConnected(EndPoint endPoint)
         {
             Console.WriteLine($"OnConnected : {endPoint}");
 
-            C_Chat chat = new C_Chat();
-            chat.Chat = "Hello Server";
-
-            Send(chat);
-
+            S_Connected s_Connected = new S_Connected();
+            Send(s_Connected);
         }
 
         public override void OnReceivePacket(ArraySegment<byte> buffer)
         {
-            ClientPacketManager.Instance.OnRecvPacket(this, buffer);
+            ServerPacketManager.Instance.OnRecvPacket(this, buffer);
         }
 
         public override void OnSend(int numberOfBytes)
         {
+            
         }
-
         public override void OnDisconnected(EndPoint endPoint)
         {
             Console.WriteLine($"OnDisconnected : {endPoint}");
+            SessionManager.Instance.Remove(SessionID);
         }
 
     }

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
-using ServerCore;
 
-namespace Client
+namespace ServerCore
 {
-    class Connector
+    public class Connector
     {
         Func<Session> sessionFactory;
         public void Initialize(IPEndPoint iPEndPoint, Func<Session> session)

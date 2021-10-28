@@ -11,8 +11,11 @@ namespace Client
 
         public override void Initialize()
         {
-            onRecv.Add((ushort)MsgID.SChat, MakePacket<S_Chat>);
-            handler.Add((ushort)MsgID.SChat, ClientPacketHandler.S_ChatHandler);
+            onRecv.Add((ushort)MsgID.SConnected, MakePacket<S_Connected>);
+            handler.Add((ushort)MsgID.SConnected, ClientPacketHandler.S_ConnectedHandler);
+           
+            onRecv.Add((ushort)MsgID.SEnter, MakePacket<S_Enter>);
+            handler.Add((ushort)MsgID.SEnter, ClientPacketHandler.S_EnterHandler);
 
         }
 

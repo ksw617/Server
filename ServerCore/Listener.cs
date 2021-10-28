@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
-using ServerCore;
 
-namespace Server
+namespace ServerCore
 {
-    class Listener
+    public class Listener
     {
         Socket listenSocket;
         Func<Session> sessionFactory;

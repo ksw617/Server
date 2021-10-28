@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using ServerCore;
 
 namespace Server
 {
@@ -16,7 +17,7 @@ namespace Server
             IPEndPoint iPEndPoint = new IPEndPoint(iPAddress, 777);
 
 
-            listener.Initialize(iPEndPoint, () => { return new ClientSession(); });
+            listener.Initialize(iPEndPoint, () => { return SessionManager.Instance.Create(); });
 
             while (true)
             {
