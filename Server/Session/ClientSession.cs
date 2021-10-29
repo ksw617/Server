@@ -14,8 +14,8 @@ namespace Server
         {
             Console.WriteLine($"OnConnected : {endPoint}");
 
-            S_Connected s_Connected = new S_Connected();
-            Send(s_Connected);
+           S_EnterOk s_EnterOK = new S_EnterOk();
+           Send(s_EnterOK);
         }
 
         public override void OnReceivePacket(ArraySegment<byte> buffer)

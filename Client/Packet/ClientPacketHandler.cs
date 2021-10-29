@@ -8,22 +8,27 @@ namespace Client
 {
     class ClientPacketHandler
     {
-        public static void S_ConnectedHandler(PacketSession session, IMessage packet)
+        public static void S_EnterOKHandler(PacketSession session, IMessage packet)
         {
-            Console.WriteLine("접속됨");
-
-            C_CreatePlayer c_CreatePlayer = new C_CreatePlayer();
-            c_CreatePlayer.PlayerInfo = new PlayerInfo();
-            c_CreatePlayer.PlayerInfo.Name = "아무개";
-            c_CreatePlayer.PlayerInfo.ModelIndex = 1;
-
-            session.Send(c_CreatePlayer);
+            C_Connect connect = new C_Connect();
+            connect.PlayerInfo = new PlayerInfo { Name = "아무개", ModelIndex = 1, Pos = new Position { X = 0, Y = 0 } };
+           
+            session.Send(connect);
         }
 
-        public static void S_EnterHandler(PacketSession session, IMessage packet)
+        public static void S_SpawnHandler(PacketSession session, IMessage packet)
         {
-           // C_EnterGameRoom enterGameRoom = new C_EnterGameRoom();
-           // session.Send(enterGameRoom);
+
+        }
+
+        public static void S_EnterPlayerHandler(PacketSession session, IMessage packet)
+        {
+
+        }
+
+        public static void S_MoveHandler(PacketSession session, IMessage packet)
+        {
+
         }
     }
 }

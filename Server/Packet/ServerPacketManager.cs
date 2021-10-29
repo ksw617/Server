@@ -10,11 +10,11 @@ namespace Server
 
         public override void Initialize()
         {
-            onRecv.Add((ushort)MsgID.CCreatePlayer, MakePacket<C_CreatePlayer>);
-            handler.Add((ushort)MsgID.CCreatePlayer, ServerPacketHandler.C_CreatePlayerHandler);
+            onRecv.Add((ushort)MsgID.CConnect, MakePacket<C_Connect>);
+            handler.Add((ushort)MsgID.CConnect, ServerPacketHandler.C_ConnectHandler);
 
-            onRecv.Add((ushort)MsgID.CEnterGameroom, MakePacket<C_EnterGameRoom>);
-            handler.Add((ushort)MsgID.CEnterGameroom, ServerPacketHandler.C_EnterGameRoomHandler);
+            onRecv.Add((ushort)MsgID.CMove, MakePacket<C_Move>);
+            handler.Add((ushort)MsgID.CMove, ServerPacketHandler.C_MoveHandler);
 
 
         }
