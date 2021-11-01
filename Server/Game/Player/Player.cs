@@ -6,6 +6,9 @@ namespace Server
     class Player
     {
         public int PlayerID { get; set; }
+        public int RoomID { get; set; }
+        
+        public ClientSession Session { get; set; }
         public PlayerInfo Info { get; set; }
     }
 }

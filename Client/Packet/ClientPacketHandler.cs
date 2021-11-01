@@ -11,19 +11,29 @@ namespace Client
         public static void S_EnterOKHandler(PacketSession session, IMessage packet)
         {
             C_Connect connect = new C_Connect();
-            connect.PlayerInfo = new PlayerInfo { Name = "아무개", ModelIndex = 1, Pos = new Position { X = 0, Y = 0 } };
+            Random random = new Random();
+            int index = random.Next(0, 100);
+            connect.PlayerInfo = new PlayerInfo { Name = $"아무개 : {index}", ModelIndex = 1, Pos = new Position { X = 0, Y = 0 } };
            
             session.Send(connect);
         }
 
+        //내가 들어 갔을때 기존에 있던 애들 뿌려줌.
         public static void S_SpawnHandler(PacketSession session, IMessage packet)
         {
+            S_Spawn spawn = (S_Spawn)packet;
 
+            foreach (var playerInfo in spawn.PlayerInfos)
+            {
+                Console.WriteLine(playerInfo.Name);
+            }
         }
 
+        //새로운애가 추가 되었을경우
         public static void S_EnterPlayerHandler(PacketSession session, IMessage packet)
         {
-
+            S_EnterPlayer enterPlayer = (S_EnterPlayer)packet;
+            Console.WriteLine($"{enterPlayer.PlayerInfo.Name}님이 이 방에 입장하였습니다.");
         }
 
         public static void S_MoveHandler(PacketSession session, IMessage packet)

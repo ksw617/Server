@@ -17,6 +17,9 @@ namespace Server
             IPEndPoint iPEndPoint = new IPEndPoint(iPAddress, 777);
 
 
+            GameRoom gameRoom = GameRoomManager.Instance.Create();
+            Console.WriteLine($"{gameRoom.roomID}번방 생성");
+
             listener.Initialize(iPEndPoint, () => { return SessionManager.Instance.Create(); });
 
             while (true)

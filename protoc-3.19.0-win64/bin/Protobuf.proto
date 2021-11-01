@@ -27,7 +27,7 @@ message C_Connect
 
 message S_Spawn
 {
-	int32 playerID = 1;
+	int32 playerID = 1; // 지우시면 될꺼 같구
 	repeated PlayerInfo playerInfos = 2;
 }
 
