@@ -11,7 +11,6 @@ namespace ServerCore
         Socket socket;
         int disconnected = 0;
 
-        //받는 버퍼 할당
         RecvBuffer recvBuffer = new RecvBuffer(1024);
 
         SocketAsyncEventArgs receiveArgs = new SocketAsyncEventArgs();
@@ -24,8 +23,6 @@ namespace ServerCore
         List<ArraySegment<byte>> sendList = new List<ArraySegment<byte>>();
 
         public abstract void OnConnected(EndPoint endPoint);
-
-        //얼마만큼 데이터를 처리 했는지 크기값 반환
         public abstract int OnReceive(ArraySegment<byte> buffer);
         public abstract void OnSend(int numberOfBytes);
         public abstract void OnDisconnected(EndPoint endPoint);
@@ -46,13 +43,9 @@ namespace ServerCore
         {
             try
             {
-                //사용할 공간 확보
                 recvBuffer.Clean();
 
-                //쓸수있는 공간 받음
                 ArraySegment<byte> segment = recvBuffer.FreeSegment;
-
-                //쓸수 있는 공간 등록
                 args.SetBuffer(segment.Array, segment.Offset, segment.Count);
 
 
@@ -75,32 +68,21 @@ namespace ServerCore
             {
                 try
                 {
-                    //WritePos 이동
-                    //args.BytesTransferred 받은 사이즈가 쓸수 있는 공간 보다 크다면
+
                     if (recvBuffer.OnWrite(args.BytesTransferred) == false)
                     {
-                        //연결 끊기
                         Disconnect();
                         return;
                     }
-
-                    //OnReceive에(처리해야할 데이터 뭉텅이를 보냄)
-                    //거기서 계산해서 처리한 데이터의 크기값을 반환
                     int processLength = OnReceive(recvBuffer.DataSegment);
-                    //처리한 데이터가 0보다 작으면??? 먼가 이상하니까
                     if (processLength < 0)
                     {
-                        //연결 끊기
                         Disconnect();
                         return;
                     }
 
-
-                    //ReadPos 이동
-                    //처리해야할 데이터 보다 처리한 데이터가 크다면 먼가 이상하니까
                     if (recvBuffer.OnRead(processLength) == false)
                     {
-                        //연결 끊기
                         Disconnect();
                         return;
                     }
@@ -120,6 +102,28 @@ namespace ServerCore
 
         }
 
+        public void Send(List<ArraySegment<byte>> sendBuffers)
+        {
+            if (sendBuffers.Count == 0)
+            {
+                return;
+            }
+
+            lock (lockObj)
+            {
+                foreach (ArraySegment<byte> sendBuffer in sendBuffers)
+                {
+                    sendQueue.Enqueue(sendBuffer);
+                }
+
+                if (!isProgressing)
+                {
+                    isProgressing = true;
+                    RegistSend(sendArgs);
+                }
+            }
+        }
+
         public void Send(ArraySegment<byte> sendBuffer)
         {
             lock (lockObj)
@@ -132,8 +136,6 @@ namespace ServerCore
                     RegistSend(sendArgs);
                 }
             }
-
-
         }
 
         void RegistSend(SocketAsyncEventArgs args)

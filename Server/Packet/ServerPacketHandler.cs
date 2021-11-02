@@ -21,23 +21,35 @@ namespace Server
             PlayerInfo playerInfo = c_Connect.PlayerInfo;
             player.Info = playerInfo;
             player.RoomID = room.roomID;
-           
-            //나한테 현재 들어와 있는 애들 뿌려줌
+
             S_Spawn s_Spawn = new S_Spawn();
             s_Spawn.PlayerInfos.Add(room.GetPlayers());
             session.Send(s_Spawn);
 
-            //다른애들한테 나의 정보를 넣어줌
-            room.BroadcastAllPlayer(player);
+            //바꿈
+            S_EnterPlayer enterPlayer = new S_EnterPlayer();
+            enterPlayer.PlayerID = player.PlayerID;
+            enterPlayer.PlayerInfo = player.Info;
+            room.BroadCast(enterPlayer);
 
-            //다하고 나는 들어감
+
             room.Enter(player);
 
         }
 
         public static void C_MoveHandler(PacketSession session, IMessage packet)
         {
+            C_Move c_Move = (C_Move)packet;
+            ClientSession clientSession = (ClientSession)session;
+            Console.WriteLine($"{clientSession.MyPlayer.Info.Name}가 (X : {c_Move.Pos.X}, Y : {c_Move.Pos.Y}) 로 움직임");
 
+            GameRoom room = GameRoomManager.Instance.Find(clientSession.MyPlayer.RoomID);
+            S_Move move = new S_Move();
+
+            //바꿈
+            move.PlayerID = clientSession.MyPlayer.PlayerID;
+            move.Pos = c_Move.Pos;
+            room.BroadCast(move);
         }
 
 

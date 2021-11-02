@@ -33,12 +33,13 @@ namespace Client
         public static void S_EnterPlayerHandler(PacketSession session, IMessage packet)
         {
             S_EnterPlayer enterPlayer = (S_EnterPlayer)packet;
-            Console.WriteLine($"{enterPlayer.PlayerInfo.Name}님이 이 방에 입장하였습니다.");
         }
 
         public static void S_MoveHandler(PacketSession session, IMessage packet)
         {
-
+            S_Move move = new S_Move();
+            move = (S_Move)packet;
+            Console.WriteLine($"Player {move.PlayerID} 가 X : {move.Pos.X}, Y : {move.Pos.Y} 로 움직임");
         }
     }
 }

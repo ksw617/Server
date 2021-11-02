@@ -1,4 +1,5 @@
-﻿using Google.Protobuf.Protocol;
+﻿using Google.Protobuf;
+using Google.Protobuf.Protocol;
 using System.Collections.Generic;
 
 namespace Server
@@ -43,17 +44,13 @@ namespace Server
             }
         }
 
-        public void BroadcastAllPlayer(Player newPlayer)
+        public void BroadCast(IMessage packet)
         {
-            S_EnterPlayer s_EnterPlayer = new S_EnterPlayer();
-            s_EnterPlayer.PlayerID = newPlayer.PlayerID;
-            s_EnterPlayer.PlayerInfo = newPlayer.Info;
-
             lock (lockObj)
             {
                 foreach (var player in players)
                 {
-                    player.Value.Session.Send(s_EnterPlayer);
+                    player.Value.Session.Send(packet);
                 }
             }
         }
