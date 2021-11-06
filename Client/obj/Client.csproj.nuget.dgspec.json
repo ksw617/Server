@@ -1,21 +1,26 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Administrator\\Desktop\\Server\\Client\\Client.csproj": {}
+    "C:\\Users\\KWAK\\Desktop\\Server\\Client\\Client.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Administrator\\Desktop\\Server\\Client\\Client.csproj": {
+    "C:\\Users\\KWAK\\Desktop\\Server\\Client\\Client.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Administrator\\Desktop\\Server\\Client\\Client.csproj",
+        "projectUniqueName": "C:\\Users\\KWAK\\Desktop\\Server\\Client\\Client.csproj",
         "projectName": "Client",
-        "projectPath": "C:\\Users\\Administrator\\Desktop\\Server\\Client\\Client.csproj",
-        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Administrator\\Desktop\\Server\\Client\\obj\\",
+        "projectPath": "C:\\Users\\KWAK\\Desktop\\Server\\Client\\Client.csproj",
+        "packagesPath": "C:\\Users\\KWAK\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\KWAK\\Desktop\\Server\\Client\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\KWAK\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
@@ -28,8 +33,8 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "C:\\Users\\Administrator\\Desktop\\Server\\ServerCore\\ServerCore.csproj": {
-                "projectPath": "C:\\Users\\Administrator\\Desktop\\Server\\ServerCore\\ServerCore.csproj"
+              "C:\\Users\\KWAK\\Desktop\\Server\\ServerCore\\ServerCore.csproj": {
+                "projectPath": "C:\\Users\\KWAK\\Desktop\\Server\\ServerCore\\ServerCore.csproj"
               }
             }
           }
@@ -64,22 +69,27 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Administrator\\Desktop\\Server\\ServerCore\\ServerCore.csproj": {
+    "C:\\Users\\KWAK\\Desktop\\Server\\ServerCore\\ServerCore.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Administrator\\Desktop\\Server\\ServerCore\\ServerCore.csproj",
+        "projectUniqueName": "C:\\Users\\KWAK\\Desktop\\Server\\ServerCore\\ServerCore.csproj",
         "projectName": "ServerCore",
-        "projectPath": "C:\\Users\\Administrator\\Desktop\\Server\\ServerCore\\ServerCore.csproj",
-        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Administrator\\Desktop\\Server\\ServerCore\\obj\\",
+        "projectPath": "C:\\Users\\KWAK\\Desktop\\Server\\ServerCore\\ServerCore.csproj",
+        "packagesPath": "C:\\Users\\KWAK\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\KWAK\\Desktop\\Server\\ServerCore\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\KWAK\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
@@ -124,7 +134,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     }
