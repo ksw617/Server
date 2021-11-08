@@ -1,32 +1,87 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\KWAK\\Desktop\\Server\\Server\\Server.csproj": {}
+    "/Users/pato/Desktop/Server/Server/Server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\KWAK\\Desktop\\Server\\ServerCore\\ServerCore.csproj": {
+    "/Users/pato/Desktop/Server/Server/Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\KWAK\\Desktop\\Server\\ServerCore\\ServerCore.csproj",
-        "projectName": "ServerCore",
-        "projectPath": "C:\\Users\\KWAK\\Desktop\\Server\\ServerCore\\ServerCore.csproj",
-        "packagesPath": "C:\\Users\\KWAK\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\KWAK\\Desktop\\Server\\ServerCore\\obj\\",
+        "projectUniqueName": "/Users/pato/Desktop/Server/Server/Server.csproj",
+        "projectName": "Server",
+        "projectPath": "/Users/pato/Desktop/Server/Server/Server.csproj",
+        "packagesPath": "/Users/pato/.nuget/packages/",
+        "outputPath": "/Users/pato/Desktop/Server/Server/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\KWAK\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "/Users/pato/.config/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
+            "projectReferences": {
+              "/Users/pato/Desktop/Server/ServerCore/ServerCore.csproj": {
+                "projectPath": "/Users/pato/Desktop/Server/ServerCore/ServerCore.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
+          "dependencies": {
+            "Google.Protobuf": {
+              "target": "Package",
+              "version": "[3.19.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.402/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/pato/Desktop/Server/ServerCore/ServerCore.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/pato/Desktop/Server/ServerCore/ServerCore.csproj",
+        "projectName": "ServerCore",
+        "projectPath": "/Users/pato/Desktop/Server/ServerCore/ServerCore.csproj",
+        "packagesPath": "/Users/pato/.nuget/packages/",
+        "outputPath": "/Users/pato/Desktop/Server/ServerCore/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/pato/.config/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -65,76 +120,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
-        }
-      }
-    },
-    "C:\\Users\\KWAK\\Desktop\\Server\\Server\\Server.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\KWAK\\Desktop\\Server\\Server\\Server.csproj",
-        "projectName": "Server",
-        "projectPath": "C:\\Users\\KWAK\\Desktop\\Server\\Server\\Server.csproj",
-        "packagesPath": "C:\\Users\\KWAK\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\KWAK\\Desktop\\Server\\Server\\obj\\",
-        "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
-        "configFilePaths": [
-          "C:\\Users\\KWAK\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
-        ],
-        "originalTargetFrameworks": [
-          "netcoreapp3.1"
-        ],
-        "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "netcoreapp3.1": {
-            "targetAlias": "netcoreapp3.1",
-            "projectReferences": {
-              "C:\\Users\\KWAK\\Desktop\\Server\\ServerCore\\ServerCore.csproj": {
-                "projectPath": "C:\\Users\\KWAK\\Desktop\\Server\\ServerCore\\ServerCore.csproj"
-              }
-            }
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        }
-      },
-      "frameworks": {
-        "netcoreapp3.1": {
-          "targetAlias": "netcoreapp3.1",
-          "dependencies": {
-            "Google.Protobuf": {
-              "target": "Package",
-              "version": "[3.19.0, )"
-            }
-          },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.402/RuntimeIdentifierGraph.json"
         }
       }
     }

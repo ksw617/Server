@@ -1,0 +1,43 @@
+﻿<Properties StartupConfiguration="{B6963D80-BA67-409B-849A-A6C5640295F7}|Default">
+  <MonoDevelop.Ide.ItemProperties.Server PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Game/GameRoom/GameRoom.cs">
+    <Files>
+      <File FileName="../ServerCore/JopTimer.cs" Line="44" Column="14" />
+      <File FileName="../ServerCore/Listener.cs" />
+      <File FileName="../ServerCore/JobQueue.cs" />
+      <File FileName="Game/Lobby/Lobby.cs" Line="24" Column="1" />
+      <File FileName="Game/Lobby/LobbyManager.cs" Line="41" Column="36" />
+      <File FileName="Program.cs" Line="37" Column="1" NotebookId="1" />
+      <File FileName="Game/GameRoom/GameRoomManager.cs" Line="12" Column="39" NotebookId="1" />
+      <File FileName="Game/GameRoom/GameRoom.cs" Line="7" Column="12" NotebookId="1" />
+      <File FileName="Packet/ServerPacketHandler.cs" Line="13" Column="62" NotebookId="1" />
+      <File FileName="Game/Player/Player.cs" Line="12" Column="26" NotebookId="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Server" expanded="True">
+            <Node name="Server" expanded="True">
+              <Node name="Game" expanded="True">
+                <Node name="GameRoom" expanded="True">
+                  <Node name="GameRoom.cs" selected="True" />
+                </Node>
+                <Node name="Lobby" expanded="True" />
+                <Node name="Player" expanded="True" />
+              </Node>
+              <Node name="Packet" expanded="True" />
+              <Node name="Session" expanded="True" />
+            </Node>
+            <Node name="ServerCore" expanded="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>

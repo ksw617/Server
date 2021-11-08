@@ -13,4 +13,10 @@
     <ProjectReference Include="..\ServerCore\ServerCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Game\Lobby\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Game\Lobby\" />
+  </ItemGroup>
 </Project>

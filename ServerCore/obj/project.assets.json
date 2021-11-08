@@ -112,33 +112,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\KWAK\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "/Users/pato/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\KWAK\\Desktop\\Server\\ServerCore\\ServerCore.csproj",
+      "projectUniqueName": "/Users/pato/Desktop/Server/ServerCore/ServerCore.csproj",
       "projectName": "ServerCore",
-      "projectPath": "C:\\Users\\KWAK\\Desktop\\Server\\ServerCore\\ServerCore.csproj",
-      "packagesPath": "C:\\Users\\KWAK\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\KWAK\\Desktop\\Server\\ServerCore\\obj\\",
+      "projectPath": "/Users/pato/Desktop/Server/ServerCore/ServerCore.csproj",
+      "packagesPath": "/Users/pato/.nuget/packages/",
+      "outputPath": "/Users/pato/Desktop/Server/ServerCore/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\KWAK\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        "/Users/pato/.config/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -177,7 +168,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.402/RuntimeIdentifierGraph.json"
       }
     }
   }

@@ -4,11 +4,21 @@ using System.Collections.Generic;
 
 namespace Server
 {
+    public class GameRoomInfo
+    {
+
+    }
     class GameRoom
     {
         public int roomID { get; set; }
         private object lockObj = new object();
         private Dictionary<int, Player> players = new Dictionary<int, Player>();
+
+        public GameRoomInfo gameRoomInfo { get; set; }
+
+        public void Update()
+        {
+        }
 
         public void Enter(Player player)
         {
