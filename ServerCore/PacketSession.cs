@@ -6,13 +6,14 @@ namespace ServerCore
 {
     public abstract class PacketSession : Session
     {
+        readonly int packetSize = sizeof(ushort);
         public sealed override int OnReceive(ArraySegment<byte> buffer) 
         {
             int processLength = 0;
 
             while (true)
             {    
-                if (buffer.Count < 2)
+                if (buffer.Count < packetSize)
                 {
                     break;
                 }
@@ -31,7 +32,6 @@ namespace ServerCore
             return processLength;
         }
 
-        //보내는 용도
         public void Send(IMessage packet)
         {
             ushort size = (ushort)packet.CalculateSize();

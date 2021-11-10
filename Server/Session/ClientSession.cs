@@ -6,7 +6,7 @@ using Google.Protobuf.Protocol;
 
 namespace Server
 {
-    class ClientSession : PacketSession
+    public class ClientSession : PacketSession
     {
         public int SessionID { get; set; }
         public Player MyPlayer { get; set; }

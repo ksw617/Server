@@ -10,31 +10,20 @@ namespace Server
     {
         public static void C_ConnectHandler(PacketSession session, IMessage packet)
         {
-            GameRoom room = GameRoomManager.Instance.Find(1);
             Player player = PlayerManager.Instance.Create();
-            
             ClientSession clientSession = (ClientSession)session;
             clientSession.MyPlayer = player;
             player.Session = clientSession;
 
-            C_Connect c_Connect = (C_Connect)packet;
-            PlayerInfo playerInfo = c_Connect.PlayerInfo;
-            player.Info = playerInfo;
-            player.RoomID = room.roomID;
+            Lobby lobby = LobbyManager.Instance.Find(1);
+            lobby.Enter(player);
+        }
 
-            S_Spawn s_Spawn = new S_Spawn();
-            s_Spawn.PlayerInfos.Add(room.GetPlayers());
-            session.Send(s_Spawn);
-
-            //바꿈
-            S_EnterPlayer enterPlayer = new S_EnterPlayer();
-            enterPlayer.PlayerID = player.PlayerID;
-            enterPlayer.PlayerInfo = player.Info;
-            room.BroadCast(enterPlayer);
-
-
-            room.Enter(player);
-
+        public static void C_CreateRoomHandler(PacketSession session, IMessage packet)
+        {
+            Lobby lobby = LobbyManager.Instance.Find(1);
+            ClientSession clientSession = (ClientSession)session;
+            lobby.CreateGameRoom(clientSession.MyPlayer.PlayerID);
         }
 
         public static void C_MoveHandler(PacketSession session, IMessage packet)

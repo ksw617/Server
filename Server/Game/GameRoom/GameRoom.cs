@@ -24,6 +24,7 @@ namespace Server
         {
             lock (lockObj)
             {
+                player.RoomID = roomID;
                 players.Add(player.PlayerID, player);
                 System.Console.WriteLine($"{ player.Info.Name}님이 입장 하였습니다.");
             }
@@ -41,6 +42,7 @@ namespace Server
                 }
                 else
                 {
+                    players[id].RoomID = 0;
                     players.Remove(id);
                 }     
             

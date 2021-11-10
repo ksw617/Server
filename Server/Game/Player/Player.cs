@@ -1,9 +1,8 @@
-﻿
-using Google.Protobuf.Protocol;
+﻿using Google.Protobuf.Protocol;
 
 namespace Server
 {
-    class Player
+    public class Player
     {
         public bool RoomOwener { get; set; }
         public int PlayerID { get; set; }
