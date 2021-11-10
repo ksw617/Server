@@ -9,6 +9,7 @@ namespace Server
 
         int lobbyID = 0;
         Dictionary<int, Lobby> lobbies = new Dictionary<int, Lobby>();
+        Queue<Lobby> lobbyPool = new Queue<Lobby>();
         object lockObj = new object();
 
         public Lobby Create()
@@ -16,7 +17,7 @@ namespace Server
             lock (lockObj)
             {
                 ++lobbyID;
-                Lobby lobby = new Lobby();
+                Lobby lobby = GetLobby();
                 lobby.lobbyID = lobbyID;
                 lobbies.Add(lobbyID, lobby);
 
@@ -38,8 +39,19 @@ namespace Server
         {
             lock (lockObj)
             {
+                lobbyPool.Enqueue(lobbies[id]);
                 lobbies.Remove(id);
             }
+        }
+
+        Lobby GetLobby()
+        {
+            if (lobbyPool.Count > 0)
+            {
+                return lobbyPool.Dequeue();
+            }
+
+            return new Lobby();
         }
     }
 }

@@ -9,6 +9,7 @@ namespace Server
 
         int roomID = 0;
         Dictionary<int, GameRoom> gameRooms = new Dictionary<int, GameRoom>();
+        Queue<GameRoom> gameRoomPool = new Queue<GameRoom>();
         object lockObj = new object();
 
         public GameRoom Create()
@@ -16,7 +17,7 @@ namespace Server
             lock (lockObj)
             {
                 ++roomID;
-                GameRoom gameRoom = new GameRoom();
+                GameRoom gameRoom = GetGameRoom();
                 gameRoom.roomID = roomID;
                 gameRooms.Add(roomID, gameRoom);
 
@@ -38,8 +39,19 @@ namespace Server
         {
             lock (lockObj)
             {
-                gameRooms.Remove(id);
+                gameRoomPool.Enqueue(gameRooms[id]);
+                gameRooms.Remove(id);              
             }
+        }
+
+        GameRoom GetGameRoom()
+        {
+            if (gameRoomPool.Count > 0)
+            {
+                return gameRoomPool.Dequeue();
+            }
+
+            return new GameRoom();
         }
     }
 }

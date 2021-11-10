@@ -9,6 +9,7 @@ namespace Server
 
         int playerID = 0;
         Dictionary<int, Player> players = new Dictionary<int, Player>();
+        Queue<Player> playerPool = new Queue<Player>();
         object lockObj = new object();
 
         public Player Create()
@@ -16,7 +17,7 @@ namespace Server
             lock (lockObj)
             {
                 ++playerID;
-                Player player = new Player();
+                Player player = GetPlayer();
                 player.PlayerID = playerID;
                 players.Add(playerID, player);
 
@@ -38,8 +39,19 @@ namespace Server
         {
             lock(lockObj)
             {
+                playerPool.Enqueue(players[id]);
                 players.Remove(id);
             }
+        }
+
+        Player GetPlayer()
+        {
+            if (playerPool.Count > 0)
+            {
+                return playerPool.Dequeue();
+            }
+
+            return new Player();
         }
     }
 }

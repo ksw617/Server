@@ -2,16 +2,17 @@
   <MonoDevelop.Ide.ItemProperties.Server PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Game/GameRoom/GameRoom.cs">
     <Files>
-      <File FileName="../ServerCore/JopTimer.cs" Line="44" Column="14" />
+      <File FileName="../ServerCore/JopTimer.cs" Line="37" Column="10" />
       <File FileName="../ServerCore/Listener.cs" />
       <File FileName="../ServerCore/JobQueue.cs" />
-      <File FileName="Game/Lobby/Lobby.cs" Line="24" Column="1" />
-      <File FileName="Game/Lobby/LobbyManager.cs" Line="41" Column="36" />
-      <File FileName="Program.cs" Line="37" Column="1" NotebookId="1" />
-      <File FileName="Game/GameRoom/GameRoomManager.cs" Line="12" Column="39" NotebookId="1" />
-      <File FileName="Game/GameRoom/GameRoom.cs" Line="7" Column="12" NotebookId="1" />
-      <File FileName="Packet/ServerPacketHandler.cs" Line="13" Column="62" NotebookId="1" />
-      <File FileName="Game/Player/Player.cs" Line="12" Column="26" NotebookId="1" />
+      <File FileName="Game/Lobby/Lobby.cs" />
+      <File FileName="Game/Lobby/LobbyManager.cs" />
+      <File FileName="Game/GameRoom/GameRoomManager.cs" Line="26" Column="10" />
+      <File FileName="Program.cs" Line="1" Column="1" NotebookId="1" />
+      <File FileName="Game/GameRoom/GameRoom.cs" Line="7" Column="18" NotebookId="1" />
+      <File FileName="Packet/ServerPacketHandler.cs" NotebookId="1" />
+      <File FileName="Game/Player/Player.cs" Line="8" Column="43" NotebookId="1" />
+      <File FileName="Game/Player/PlayerManager.cs" NotebookId="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">

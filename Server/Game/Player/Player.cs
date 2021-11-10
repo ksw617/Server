@@ -5,6 +5,7 @@ namespace Server
 {
     class Player
     {
+        public bool RoomOwener { get; set; }
         public int PlayerID { get; set; }
         public int RoomID { get; set; }
         

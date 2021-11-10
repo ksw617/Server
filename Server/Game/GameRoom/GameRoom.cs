@@ -34,7 +34,15 @@ namespace Server
             lock (lockObj)
             {
                 System.Console.WriteLine($"이름 : {players[id].Info.Name}씨 나감");
-                players.Remove(id);
+                if (players[id].RoomOwener)
+                {
+                    players[id].RoomOwener = false;
+                    DestroyGameRoom();
+                }
+                else
+                {
+                    players.Remove(id);
+                }     
             
             }
         }
@@ -64,5 +72,17 @@ namespace Server
                 }
             }
         }
+
+        void DestroyGameRoom()
+        {
+            foreach (var player in players)
+            {
+                //퇴출
+            }
+
+            players.Clear();
+            GameRoomManager.Instance.Remove(roomID);
+        }
+
     }
 }
