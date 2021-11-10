@@ -1,12 +1,3 @@
-C:/Users/Administrator/Desktop/Server/ServerCore/bin/Debug/netcoreapp3.1/ServerCore.deps.json
-C:/Users/Administrator/Desktop/Server/ServerCore/bin/Debug/netcoreapp3.1/ServerCore.dll
-C:/Users/Administrator/Desktop/Server/ServerCore/bin/Debug/netcoreapp3.1/ServerCore.pdb
-C:/Users/Administrator/Desktop/Server/ServerCore/obj/Debug/netcoreapp3.1/ServerCore.csprojAssemblyReference.cache
-C:/Users/Administrator/Desktop/Server/ServerCore/obj/Debug/netcoreapp3.1/ServerCore.AssemblyInfoInputs.cache
-C:/Users/Administrator/Desktop/Server/ServerCore/obj/Debug/netcoreapp3.1/ServerCore.AssemblyInfo.cs
-C:/Users/Administrator/Desktop/Server/ServerCore/obj/Debug/netcoreapp3.1/ServerCore.csproj.CoreCompileInputs.cache
-C:/Users/Administrator/Desktop/Server/ServerCore/obj/Debug/netcoreapp3.1/ServerCore.dll
-C:/Users/Administrator/Desktop/Server/ServerCore/obj/Debug/netcoreapp3.1/ServerCore.pdb
 /Users/pato/Desktop/Server/ServerCore/bin/Debug/netcoreapp3.1/ServerCore.deps.json
 /Users/pato/Desktop/Server/ServerCore/bin/Debug/netcoreapp3.1/ServerCore.dll
 /Users/pato/Desktop/Server/ServerCore/bin/Debug/netcoreapp3.1/ServerCore.pdb
@@ -17,3 +8,12 @@ C:/Users/Administrator/Desktop/Server/ServerCore/obj/Debug/netcoreapp3.1/ServerC
 /Users/pato/Desktop/Server/ServerCore/obj/Debug/netcoreapp3.1/ServerCore.csproj.CoreCompileInputs.cache
 /Users/pato/Desktop/Server/ServerCore/obj/Debug/netcoreapp3.1/ServerCore.dll
 /Users/pato/Desktop/Server/ServerCore/obj/Debug/netcoreapp3.1/ServerCore.pdb
+C:\Users\Administrator\Desktop\Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.deps.json
+C:\Users\Administrator\Desktop\Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.dll
+C:\Users\Administrator\Desktop\Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.pdb
+C:\Users\Administrator\Desktop\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.csprojAssemblyReference.cache
+C:\Users\Administrator\Desktop\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.AssemblyInfoInputs.cache
+C:\Users\Administrator\Desktop\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.AssemblyInfo.cs
+C:\Users\Administrator\Desktop\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.csproj.CoreCompileInputs.cache
+C:\Users\Administrator\Desktop\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.dll
+C:\Users\Administrator\Desktop\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.pdb

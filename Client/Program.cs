@@ -20,17 +20,10 @@ namespace Client
 
             connector.Initialize(iPEndPoint, () => { return serverSession; });
 
-            C_Move c_Move = new C_Move();
-            c_Move.Pos = new Position();
-            Random random = new Random();
-
             while (true)
             {
                 Thread.Sleep(1000);
-                c_Move.Pos.X = random.Next(0, 100);
-                c_Move.Pos.Y = random.Next(0, 100);
-
-                serverSession.Send(c_Move);
+         
 
             }
         }

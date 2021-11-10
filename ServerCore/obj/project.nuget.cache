@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "MbpKsBkqWMwAr1D+2DdY5tfn0IFrJLlH/pBIVDp6xrAFJTMDkcGnFG5OJ8E9T1/UwiSgiNssRxH+zNyfP+uYBQ==",
+  "dgSpecHash": "G/4TdsfsnMC3PM1NQ9xokP7QnYIo/kYzvDXkzi+PhVFtbzcEX/D8E7KrIlVzCR1atg6Oqmib1F9V6I6asZTi3w==",
   "success": true,
-  "projectFilePath": "/Users/pato/Desktop/Server/ServerCore/ServerCore.csproj",
+  "projectFilePath": "C:\\Users\\Administrator\\Desktop\\Server\\ServerCore\\ServerCore.csproj",
   "expectedPackageFiles": [
-    "/Users/pato/.nuget/packages/google.protobuf/3.19.0/google.protobuf.3.19.0.nupkg.sha512",
-    "/Users/pato/.nuget/packages/system.memory/4.5.3/system.memory.4.5.3.nupkg.sha512",
-    "/Users/pato/.nuget/packages/system.runtime.compilerservices.unsafe/4.5.2/system.runtime.compilerservices.unsafe.4.5.2.nupkg.sha512"
+    "C:\\Users\\Administrator\\.nuget\\packages\\google.protobuf\\3.19.0\\google.protobuf.3.19.0.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.5.2\\system.runtime.compilerservices.unsafe.4.5.2.nupkg.sha512"
   ],
   "logs": []
 }
