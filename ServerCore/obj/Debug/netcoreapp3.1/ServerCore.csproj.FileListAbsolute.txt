@@ -17,3 +17,13 @@ C:\Users\Administrator\Desktop\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerC
 C:\Users\Administrator\Desktop\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.csproj.CoreCompileInputs.cache
 C:\Users\Administrator\Desktop\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.dll
 C:\Users\Administrator\Desktop\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.pdb
+C:\Users\KWAK\Desktop\Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.deps.json
+C:\Users\KWAK\Desktop\Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.dll
+C:\Users\KWAK\Desktop\Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.pdb
+C:\Users\KWAK\Desktop\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.csproj.AssemblyReference.cache
+C:\Users\KWAK\Desktop\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\KWAK\Desktop\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.AssemblyInfoInputs.cache
+C:\Users\KWAK\Desktop\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.AssemblyInfo.cs
+C:\Users\KWAK\Desktop\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.csproj.CoreCompileInputs.cache
+C:\Users\KWAK\Desktop\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.dll
+C:\Users\KWAK\Desktop\Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.pdb

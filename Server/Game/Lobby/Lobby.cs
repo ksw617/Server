@@ -5,6 +5,9 @@ namespace Server
 {
     public class Lobby
     {
+        private static Lobby instance = new Lobby();
+        public static Lobby Instance { get { return instance; } }
+
         public int lobbyID { get; set; }
         private object lockObj = new object();
         private Dictionary<int, GameRoom> gameRooms = new Dictionary<int, GameRoom>();

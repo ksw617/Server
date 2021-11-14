@@ -24,7 +24,8 @@ namespace Server
         static void Main(string[] args)
         {
 
-            Lobby lobby = LobbyManager.Instance.Create();
+            //?로비를 어떻게 할지 고민
+            Lobby lobby = Lobby.Instance;
             SetTickTime(lobby.Update, 50);
 
             string host = Dns.GetHostName();

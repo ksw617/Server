@@ -15,15 +15,13 @@ namespace Server
             clientSession.MyPlayer = player;
             player.Session = clientSession;
 
-            Lobby lobby = LobbyManager.Instance.Find(1);
-            lobby.Enter(player);
+            Lobby.Instance.Enter(player);
         }
 
         public static void C_CreateRoomHandler(PacketSession session, IMessage packet)
         {
-            Lobby lobby = LobbyManager.Instance.Find(1);
             ClientSession clientSession = (ClientSession)session;
-            lobby.CreateGameRoom(clientSession.MyPlayer.PlayerID);
+            Lobby.Instance.CreateGameRoom(clientSession.MyPlayer.PlayerID);
         }
 
         public static void C_MoveHandler(PacketSession session, IMessage packet)
