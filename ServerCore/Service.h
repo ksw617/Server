@@ -7,4 +7,6 @@ private:
 public:
 	Service(wstring ip, u_short port);
 	~Service();
+public:
+	SOCKADDR_IN& GetSockAddr() { return sockAddr; }
 };
