@@ -93,19 +93,6 @@ int main()
 		return 1;
 	}
 
-	//DisconnectEx 함수포인터 로드
-	LPFN_DISCONNECTEX lpfnDisconnectEx = NULL;
-	GUID guidDisConnectEx = WSAID_DISCONNECTEX;
-	if (WSAIoctl(connectSocket, SIO_GET_EXTENSION_FUNCTION_POINTER, &guidDisConnectEx, sizeof(guidDisConnectEx),
-		&lpfnDisconnectEx, sizeof(lpfnDisconnectEx), &dwBytes, NULL, NULL) == SOCKET_ERROR)
-	{
-		printf("WSAIoctl DisconnectEx load failed with error : %d\n", WSAGetLastError());
-		closesocket(connectSocket);
-		WSACleanup();
-		return 1;
-	}
-
-
 	SOCKADDR_IN service;
 	memset(&service, 0, sizeof(service));
 	service.sin_family = AF_INET;
@@ -153,23 +140,10 @@ int main()
 
 	}
 
-	//overlapped 대신에 session
-	Session* disconnectSession = new Session;
-	disconnectSession->type = DISCONNECT;
-	//WSAOVERLAPPED disconnectOverlapped = {};
-
-	if (!lpfnDisconnectEx(connectSocket, &disconnectSession->overlapped, 0, 0))
+	while (true)
 	{
-		if (WSAGetLastError() != ERROR_IO_PENDING)
-		{
-			printf("DisconnectEx failed with error : %d\n", WSAGetLastError());
-			closesocket(connectSocket);
-			WSACleanup();
-			return 1;
-		}
 
 	}
-
 
 	t.join();
 

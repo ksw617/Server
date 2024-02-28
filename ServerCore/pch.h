@@ -1,7 +1,4 @@
-
-#ifndef PCH_H
-#define PCH_H
-
+#pragma once
 #define WIN32_LEAN_AND_MEAN 
 
-#endif 
+#include "CorePch.h"
