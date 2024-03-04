@@ -4,6 +4,7 @@
 #include "SocketHelper.h"
 #include "IocpCore.h"
 #include "Session.h"
+#include "IocpEvent.h"
 
 
 Listener::~Listener()
@@ -17,7 +18,6 @@ bool Listener::StartAccept(Service* service)
     if (socket == INVALID_SOCKET)
         return false;
     
-    //소켓옵션 추가
     if (!SocketHelper::SetReuseAddress(socket, true))
         return false;
     
@@ -26,7 +26,7 @@ bool Listener::StartAccept(Service* service)
     
 
     ULONG_PTR key = 0;
-    service->GetIocpCore()->Register((HANDLE)socket, key);
+    service->GetIocpCore()->Register(this);
 
    if (!SocketHelper::Bind(socket, service->GetSockAddr()))
        return false;
@@ -36,20 +36,11 @@ bool Listener::StartAccept(Service* service)
    
    printf("listening...\n");
 
-   SOCKET acceptSocket = SocketHelper::CreateSocket();
-   if (acceptSocket == INVALID_SOCKET)
-       return false;
+   AcceptEvent* acceptEvent = new AcceptEvent();
+   acceptEvent->iocpObj = this;
+   RegisterAccept(acceptEvent);
 
-   Session* session = new Session;
 
-    DWORD dwBytes = 0;
-    if (!SocketHelper::AcceptEx(socket, session->GetSocket(), session->recvBuffer, 0, sizeof(SOCKADDR_IN) + 16, sizeof(SOCKADDR_IN) + 16, &dwBytes, &session->overlapped))
-    {
-        if (WSAGetLastError() != ERROR_IO_PENDING)
-        {
-            return false;
-        }
-    }
 
     return true;
 }
@@ -57,4 +48,49 @@ bool Listener::StartAccept(Service* service)
 void Listener::CloseSocket()
 {
     SocketHelper::CloseSocket(socket);
+}
+
+void Listener::RegisterAccept(AcceptEvent* acceptEvent)
+{
+    Session* session = new Session;
+    acceptEvent->Init();
+    // AcceptEvent에 session 추가
+    acceptEvent->session = session;
+
+    DWORD dwBytes = 0;
+    if (!SocketHelper::AcceptEx(socket, session->GetSocket(), session->recvBuffer, 0, sizeof(SOCKADDR_IN) + 16, sizeof(SOCKADDR_IN) + 16, &dwBytes, (LPOVERLAPPED)acceptEvent))
+    {
+        if (WSAGetLastError() != ERROR_IO_PENDING)
+        {
+            RegisterAccept(acceptEvent);
+        }
+    }
+}
+
+void Listener::ProcessAccept(AcceptEvent* acceptEvent)
+{
+    Session* session = acceptEvent->session;
+    if (!SocketHelper::SetUpdateAcceptSocket(session->GetSocket(), socket))
+    {
+        printf("UpdateAcceptSocket Error\n");
+        RegisterAccept(acceptEvent);
+        return;
+    }
+
+    printf("ProcessAccept\n");
+
+
+}
+
+HANDLE Listener::GetHandle()
+{
+    return (HANDLE)socket;
+}
+
+void Listener::ObserveIO(IocpEvent* iocpEvent, int numOfBytes)
+{
+    AcceptEvent* acceptEvent = (AcceptEvent*)iocpEvent;
+    ProcessAccept(acceptEvent);
+
+
 }

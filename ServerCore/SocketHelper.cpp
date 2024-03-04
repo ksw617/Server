@@ -46,6 +46,11 @@ bool SocketHelper::SetLinger(SOCKET socket, u_short onOff, u_short time)
     return SetSocketOpt(socket, SOL_SOCKET, SO_LINGER, linger);
 }
 
+bool SocketHelper::SetUpdateAcceptSocket(SOCKET acceptSocket, SOCKET listenSocket)
+{
+    return SetSocketOpt(acceptSocket, SOL_SOCKET, SO_UPDATE_ACCEPT_CONTEXT, listenSocket);
+}
+
 bool SocketHelper::Bind(SOCKET socket, SOCKADDR_IN sockAddr)
 {
     return bind(socket, (SOCKADDR*)&sockAddr, sizeof(sockAddr)) != SOCKET_ERROR;
