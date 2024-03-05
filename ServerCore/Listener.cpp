@@ -54,7 +54,6 @@ void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 {
     Session* session = new Session;
     acceptEvent->Init();
-    // AcceptEvent에 session 추가
     acceptEvent->session = session;
 
     DWORD dwBytes = 0;
@@ -77,8 +76,20 @@ void Listener::ProcessAccept(AcceptEvent* acceptEvent)
         return;
     }
 
-    printf("ProcessAccept\n");
+    //추가
+    SOCKADDR_IN sockAddr;
+    int sockAddrSize = sizeof(sockAddr);
+    if (getpeername(session->GetSocket(), (SOCKADDR*)&sockAddr, &sockAddrSize) == SOCKET_ERROR)
+    {
+        printf("getpeername Error\n");
+        RegisterAccept(acceptEvent);
+        return;
+    }
 
+    session->SetSockAddr(sockAddr);
+    session->ProcessConnect();
+
+    RegisterAccept(acceptEvent);
 
 }
 

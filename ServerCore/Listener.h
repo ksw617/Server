@@ -8,7 +8,7 @@ class Listener : public IocpObj
 private:
 	SOCKET socket = INVALID_SOCKET;
 public:
-	Listener() = default;
+	Listener() {}
 	//virtual ¼Ò¸êÀÚ
 	virtual ~Listener();
 public:

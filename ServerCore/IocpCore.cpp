@@ -5,6 +5,7 @@
 
 IocpCore::IocpCore()
 {
+	//생성
 	iocpHandle = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, NULL, NULL);
 }
 
@@ -15,7 +16,7 @@ IocpCore::~IocpCore()
 
 void IocpCore::Register(class IocpObj* iocpObj)
 {
-	//
+	//등록(Listener->socket, iocpCore생성되었을때 만들어진 핸들, NULL,NULL)
 	CreateIoCompletionPort(iocpObj->GetHandle(), iocpHandle, 0, 0);
 }
 

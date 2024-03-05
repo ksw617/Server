@@ -15,13 +15,15 @@ Session::~Session()
 
 void Session::ProcessConnect()
 {
+	printf("Seesion::ProcessConnect\n");
 }
 
 HANDLE Session::GetHandle()
 {
-	return HANDLE();
+	return (HANDLE)socket;
 }
 
 void Session::ObserveIO(IocpEvent* iocpEvent, int numOfBytes)
 {
+	//Todo
 }
