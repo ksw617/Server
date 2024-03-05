@@ -16,7 +16,6 @@ IocpCore::~IocpCore()
 
 void IocpCore::Register(class IocpObj* iocpObj)
 {
-	//등록(Listener->socket, iocpCore생성되었을때 만들어진 핸들, NULL,NULL)
 	CreateIoCompletionPort(iocpObj->GetHandle(), iocpHandle, 0, 0);
 }
 
@@ -29,6 +28,11 @@ bool IocpCore::ObserveIO(DWORD time)
 	if (GetQueuedCompletionStatus(iocpHandle, &bytesTransferred, &key, (LPOVERLAPPED*)&iocpEvent, time))
 	{
 		IocpObj* iocpObj = iocpEvent->iocpObj;
+
+		//까보니까 Listener네
+		//Listener의 ObserveIO 함수 실행
+		//AcceptEvent 넘겨주고 - 연결되어 있는 Session, Listener
+		// bytesTransferred 얼마나 받았는지
 		iocpObj->ObserveIO(iocpEvent, bytesTransferred);
 	}
 	else

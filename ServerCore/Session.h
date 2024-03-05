@@ -4,7 +4,7 @@ class Session : public IocpObj
 {
 private:
 	SOCKET socket = INVALID_SOCKET;
-	SOCKADDR_IN sockAddr;
+	SOCKADDR_IN sockAddr = {};
 public:
 	char recvBuffer[1024] = {};
 public:
@@ -14,6 +14,7 @@ public:
 public:
 	SOCKET GetSocket() { return socket; }
 public:
+	//sockAddr는 클라의 주소 담고 있음
 	void SetSockAddr(SOCKADDR_IN address) { sockAddr = address; }
 public:
 	void ProcessConnect();

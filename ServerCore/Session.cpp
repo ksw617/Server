@@ -4,8 +4,9 @@
 
 Session::Session()
 {
+	//소켓 하나 만들어줌
+	//Server에서는 AcceptSocket
 	socket = SocketHelper::CreateSocket();
-
 }
 
 Session::~Session()
@@ -15,6 +16,7 @@ Session::~Session()
 
 void Session::ProcessConnect()
 {
+	//Todo
 	printf("Seesion::ProcessConnect\n");
 }
 

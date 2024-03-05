@@ -7,6 +7,7 @@ int main()
 {
 	printf("============= SERVER =============\n");
 
+	//저기서 접속할때까지 대기
 	Service* service = new Service(L"127.0.0.1", 27015);
 	if (!service->Start())
 	{
@@ -14,6 +15,7 @@ int main()
 		return 1;
 
 	}
+
 	thread t([=]()
 		{
 			while (true)
@@ -22,8 +24,6 @@ int main()
 			}
 		}
 	);
-
-	
 
 	t.join();
 

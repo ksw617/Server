@@ -9,7 +9,7 @@ IocpEvent::IocpEvent(EventType type) : eventType(type)
 
 void IocpEvent::Init()
 {
-	//부모에 있는::
+	//부모에 있는:: 애들 날려줌
 	OVERLAPPED::hEvent = NULL;	//0
 	OVERLAPPED::Internal = NULL;
 	OVERLAPPED::InternalHigh = NULL;

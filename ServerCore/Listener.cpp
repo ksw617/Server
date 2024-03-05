@@ -36,11 +36,11 @@ bool Listener::StartAccept(Service* service)
    
    printf("listening...\n");
 
+
    AcceptEvent* acceptEvent = new AcceptEvent();
+   //이때 등록 했지~
    acceptEvent->iocpObj = this;
    RegisterAccept(acceptEvent);
-
-
 
     return true;
 }
@@ -52,15 +52,19 @@ void Listener::CloseSocket()
 
 void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 {
-    Session* session = new Session;
     acceptEvent->Init();
+    //새롭게 받을애꺼
+    Session* session = new Session;
     acceptEvent->session = session;
 
     DWORD dwBytes = 0;
+    //새롭게 받을꺼 셋팅                                                                                 //여기에서 등록
     if (!SocketHelper::AcceptEx(socket, session->GetSocket(), session->recvBuffer, 0, sizeof(SOCKADDR_IN) + 16, sizeof(SOCKADDR_IN) + 16, &dwBytes, (LPOVERLAPPED)acceptEvent))
     {
+
         if (WSAGetLastError() != ERROR_IO_PENDING)
-        {
+        {  
+            //새롭게 받을꺼 실행
             RegisterAccept(acceptEvent);
         }
     }
@@ -76,7 +80,6 @@ void Listener::ProcessAccept(AcceptEvent* acceptEvent)
         return;
     }
 
-    //추가
     SOCKADDR_IN sockAddr;
     int sockAddrSize = sizeof(sockAddr);
     if (getpeername(session->GetSocket(), (SOCKADDR*)&sockAddr, &sockAddrSize) == SOCKET_ERROR)
@@ -102,6 +105,5 @@ void Listener::ObserveIO(IocpEvent* iocpEvent, int numOfBytes)
 {
     AcceptEvent* acceptEvent = (AcceptEvent*)iocpEvent;
     ProcessAccept(acceptEvent);
-
 
 }
