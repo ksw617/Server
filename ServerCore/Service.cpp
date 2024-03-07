@@ -4,7 +4,7 @@
 #include "IocpCore.h"
 #include "Listener.h"
 
-Service::Service(wstring ip, u_short port)
+Service::Service(ServiceType type, wstring ip, u_short port) : serviceType(type)
 {
 	if (!SocketHelper::StartUp())
 		return;
@@ -17,7 +17,6 @@ Service::Service(wstring ip, u_short port)
 	sockAddr.sin_addr = address;
 	sockAddr.sin_port = htons(port);
 
-	//이때 할당
 	iocpCore = new IocpCore;
 }
 
@@ -30,10 +29,4 @@ Service::~Service()
 		iocpCore = nullptr;
 	}
 
-}
-
-bool Service::Start()
-{
-	listener = new Listener;
-	return listener->StartAccept(this);
 }

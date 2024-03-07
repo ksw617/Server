@@ -19,6 +19,6 @@ public:
 	void ProcessAccept(AcceptEvent* acceptEvent);
 public:
 	HANDLE GetHandle() override;
-	void ObserveIO(IocpEvent* iocpEvent, int numOfBytes) override;
+	void ObserveIO(class IocpEvent* iocpEvent, int numOfBytes) override;
 };
 

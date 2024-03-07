@@ -1,20 +1,27 @@
 #pragma once
 
+enum class ServiceType : u_char
+{ 
+	SERVER,
+	CLIENT,
+};
+
 class IocpCore;
-class Listener;
 
 class Service
 {
 private:
+	ServiceType serviceType;
 	SOCKADDR_IN sockAddr = {};
-	Listener* listener = nullptr;
 	IocpCore* iocpCore = nullptr;
+protected:
+	shared_mutex rwLock;
 public:
-	Service(wstring ip, u_short port);
-	~Service();
+	Service(ServiceType type, wstring ip, u_short port);
+	virtual ~Service();
 public:
 	SOCKADDR_IN& GetSockAddr() { return sockAddr; }
 	IocpCore* GetIocpCore() { return iocpCore; }
 public:
-	bool Start();
+	virtual bool Start() abstract;
 };
