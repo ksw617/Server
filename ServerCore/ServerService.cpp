@@ -2,7 +2,8 @@
 #include "ServerService.h"
 #include "Listener.h"
 
-ServerService::ServerService(wstring ip, u_short port) : Service(ServiceType::SERVER, ip, port)
+
+ServerService::ServerService(wstring ip, u_short port, SessionFactory factory) : Service(ServiceType::SERVER, ip, port, factory)
 {
 }
 

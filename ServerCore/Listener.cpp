@@ -1,19 +1,21 @@
 #include "pch.h"
 #include "Listener.h"
-#include "Service.h"
+
 #include "SocketHelper.h"
 #include "IocpCore.h"
 #include "Session.h"
 #include "IocpEvent.h"
-
+#include "ServerService.h"
 
 Listener::~Listener()
 {
     CloseSocket();
 }
 
-bool Listener::StartAccept(Service* service)
+bool Listener::StartAccept(ServerService* service)
 {
+    serverService = service;
+
     socket = SocketHelper::CreateSocket();
     if (socket == INVALID_SOCKET)
         return false;
@@ -38,7 +40,6 @@ bool Listener::StartAccept(Service* service)
 
 
    AcceptEvent* acceptEvent = new AcceptEvent();
-   //이때 등록 했지~
    acceptEvent->iocpObj = this;
    RegisterAccept(acceptEvent);
 
@@ -52,19 +53,16 @@ void Listener::CloseSocket()
 
 void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 {
+    Session* session = serverService->CreateSession();
     acceptEvent->Init();
-    //새롭게 받을애꺼
-    Session* session = new Session;
     acceptEvent->session = session;
 
     DWORD dwBytes = 0;
-    //새롭게 받을꺼 셋팅                                                                                 //여기에서 등록
     if (!SocketHelper::AcceptEx(socket, session->GetSocket(), session->recvBuffer, 0, sizeof(SOCKADDR_IN) + 16, sizeof(SOCKADDR_IN) + 16, &dwBytes, (LPOVERLAPPED)acceptEvent))
     {
 
         if (WSAGetLastError() != ERROR_IO_PENDING)
         {  
-            //새롭게 받을꺼 실행
             RegisterAccept(acceptEvent);
         }
     }
