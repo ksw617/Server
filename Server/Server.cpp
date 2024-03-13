@@ -5,7 +5,10 @@
 
 class ServerSession : public Session
 {
-	//Todo
+	virtual void OnConnected() override 
+	{
+		cout << "Server Session" << endl;
+	}
 
 };
 
@@ -15,7 +18,7 @@ int main()
 {
 	printf("============= SERVER =============\n");
 
-	//저기서 접속할때까지 대기
+	//ServerService(ip주소, port번호, (함수))
 	Service* service = new ServerService(L"127.0.0.1", 27015, []() {return new ServerSession; });
 	if (!service->Start())
 	{

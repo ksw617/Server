@@ -16,12 +16,7 @@ IocpCore::~IocpCore()
 
 bool IocpCore::Register(IocpObj* iocpObj)
 {
-	if (iocpObj->GetHandle() == nullptr)
-		return false;
-
-	CreateIoCompletionPort(iocpObj->GetHandle(), iocpHandle, 0, 0);
-
-	return true;
+	return CreateIoCompletionPort(iocpObj->GetHandle(), iocpHandle, 0, 0);
 }
 
 bool IocpCore::ObserveIO(DWORD time)
