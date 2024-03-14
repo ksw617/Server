@@ -10,6 +10,24 @@ class ServerSession : public Session
 		cout << "Server Session" << endl;
 	}
 
+	virtual int OnRecv(BYTE* buffer, int len) override
+	{
+		printf("OnRecv : %s, On Recv Len : %d\n", buffer, len);
+
+		Send(buffer, len);
+		return len;
+	}
+
+	virtual void OnSend(int len) override
+	{
+		printf("OnSend Len : %d\n", len);
+	}
+
+	virtual void OnDisconnected()
+	{
+		printf("On disconnected\n");
+	}
+
 };
 
 

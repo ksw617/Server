@@ -19,6 +19,7 @@ Service::Service(ServiceType type, wstring ip, u_short port, SessionFactory fact
 	sockAddr.sin_port = htons(port);
 
 	iocpCore = new IocpCore;
+	sessionCount = 0;
 }
 
 Service::~Service()
@@ -33,10 +34,9 @@ Service::~Service()
 }
 
 Session* Service::CreateSession()
-{
-	//Session* session = new ServerSession();
-	// ==					
+{				
 	Session* session = sessionFactory();
+	session->SetService(this);   // 여기로 변경
 
 	if (!iocpCore->Register(session))
 	{
