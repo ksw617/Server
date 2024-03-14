@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "SocketHelper.h"
 
+LPFN_CONNECTEX SocketHelper::ConnectEx = nullptr;
 LPFN_ACCEPTEX SocketHelper::AcceptEx = nullptr;
+
 
 bool SocketHelper::StartUp()
 {
@@ -10,6 +12,8 @@ bool SocketHelper::StartUp()
         return false;
 
     SOCKET tempSocket = CreateSocket();
+    //함수 포인터에 주소값 넣어줌
+    SetIOControl(tempSocket, WSAID_CONNECTEX, (LPVOID*)&ConnectEx);
     SetIOControl(tempSocket, WSAID_ACCEPTEX, (LPVOID*)&AcceptEx);
     CloseSocket(tempSocket);
 
@@ -53,6 +57,17 @@ bool SocketHelper::SetUpdateAcceptSocket(SOCKET acceptSocket, SOCKET listenSocke
 
 bool SocketHelper::Bind(SOCKET socket, SOCKADDR_IN sockAddr)
 {
+    return bind(socket, (SOCKADDR*)&sockAddr, sizeof(sockAddr)) != SOCKET_ERROR;
+}
+
+bool SocketHelper::BindAnyAddress(SOCKET socket, u_short port)
+{
+    SOCKADDR_IN sockAddr;
+    memset(&sockAddr, 0, sizeof(sockAddr));
+    sockAddr.sin_family = AF_INET;
+    sockAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    sockAddr.sin_port = htons(port);
+
     return bind(socket, (SOCKADDR*)&sockAddr, sizeof(sockAddr)) != SOCKET_ERROR;
 }
 

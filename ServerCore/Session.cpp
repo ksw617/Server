@@ -18,6 +18,40 @@ HANDLE Session::GetHandle()
 	return (HANDLE)socket;
 }
 
+bool Session::Connect()
+{
+	//Connect 등록
+	return RegisterConnect();
+}
+
+bool Session::RegisterConnect()
+{
+	if (IsConnected())
+		return false;
+	if (GetService()->GetServiceType() != ServiceType::CLIENT)
+		return false;
+	if (SocketHelper::BindAnyAddress(socket, 0) == false)
+		return false;
+
+	connectEvent.Init();
+	connectEvent.iocpObj = this;
+
+	DWORD numOfBytes = 0;
+	SOCKADDR_IN sockAddr = GetService()->GetSockAddr();
+	if (SocketHelper::ConnectEx(socket, (SOCKADDR*)&sockAddr, sizeof(sockAddr), nullptr, 0, &numOfBytes, &connectEvent))
+	{
+		int errorCode = WSAGetLastError();
+		if (errorCode != ERROR_IO_PENDING)
+		{
+			HandleError(errorCode);
+			connectEvent.iocpObj = nullptr;
+			return false;
+
+		}
+	}
+
+	return true;
+}
 
 void Session::ProcessConnect()
 {
@@ -30,7 +64,6 @@ void Session::ProcessConnect()
 	RegisterRecv();
 	
 }
-
 
 void Session::RegisterRecv()
 {
@@ -74,16 +107,11 @@ void Session::ProcessRecv(int numOfBytes)
 
 
 
-
 void Session::Send(BYTE* buffer, int len)
 {
-	//SendEvent 만들기
 	SendEvent* sendEvent = new SendEvent();
-	//sendEvent iocpObj는 여기
 	sendEvent->iocpObj = this;
-	//sendEvent의 vector<Byte> sendBuffer <- 크기값을 len로
 	sendEvent->sendBuffer.resize(len);
-	//buffer의 데이터를 복사해서 sendEvent->sendBuffer에다가 붙여넣기
 	memcpy(sendEvent->sendBuffer.data(), buffer, len);
 
 	unique_lock<shared_mutex> lock(rwLock);
@@ -94,21 +122,17 @@ void Session::Send(BYTE* buffer, int len)
 void Session::RegisterSend(SendEvent* sendEvent)
 {
 
-	//연결 상태가 아니라면
 	if (IsConnected() == false)
 		return;
 
-	//WSASend 구현
 	WSABUF wsaBuf;
 	wsaBuf.buf = (char*)sendEvent->sendBuffer.data();
 	wsaBuf.len = (ULONG)sendEvent->sendBuffer.size();
 
 	DWORD numOfBytes = 0;
-	//SendEvent 등록
 	if (WSASend(socket, &wsaBuf, 1, &numOfBytes, 0, sendEvent, nullptr) == SOCKET_ERROR)
 	{
 		int errorCode = WSAGetLastError();
-		//에러 발생시
 		if (errorCode != WSA_IO_PENDING)
 		{
 			HandleError(errorCode);
@@ -127,7 +151,7 @@ void Session::ObserveIO(IocpEvent* iocpEvent, int numOfBytes)
 	case EventType::RECV:
 		ProcessRecv(numOfBytes);
 		break;
-	case EventType::SEND:	//이벤트 타입이 Send 였을경우
+	case EventType::SEND:	
 		ProcessSend((SendEvent*)iocpEvent, numOfBytes);
 		break;
 	default:

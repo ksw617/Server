@@ -2,6 +2,8 @@
 class SocketHelper
 {
 public:
+	//비동기 connect 함수 포인터
+	static LPFN_CONNECTEX ConnectEx;
 	static LPFN_ACCEPTEX AcceptEx;
 public:
 	static bool StartUp();
@@ -10,13 +12,12 @@ public:
 	static bool SetIOControl(SOCKET socket, GUID guid, LPVOID* func);
 	static SOCKET CreateSocket();
 public:
-	//Socket Option
 	static bool SetReuseAddress(SOCKET socket, bool enable);
 	static bool SetLinger(SOCKET socket, u_short onOff, u_short time);
-	//ListenSocket 정보 AcceptSocket에 업데이트
 	static bool SetUpdateAcceptSocket(SOCKET acceptSocket, SOCKET listenSocket);
 public:
 	static bool Bind(SOCKET socket, SOCKADDR_IN sockAddr);
+	static bool BindAnyAddress(SOCKET socket, u_short port);
 	static bool Listen(SOCKET socket, int backlog = SOMAXCONN);
 	static void CloseSocket(SOCKET& socket);
 };

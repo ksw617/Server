@@ -22,6 +22,12 @@ public:
 	void Init();
 };
 
+//Connect 추가
+class ConnectEvent : public IocpEvent
+{
+public:
+	ConnectEvent() : IocpEvent(EventType::CONNECT) {}
+};
 
 class AcceptEvent : public IocpEvent
 {
@@ -38,7 +44,7 @@ public:
 
 };
 
-//Send 추가
+
 class SendEvent : public IocpEvent
 {
 public:
