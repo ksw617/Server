@@ -17,6 +17,7 @@ public:
 	static bool SetUpdateAcceptSocket(SOCKET acceptSocket, SOCKET listenSocket);
 public:
 	static bool Bind(SOCKET socket, SOCKADDR_IN sockAddr);
+	//아무 주소 바인드
 	static bool BindAnyAddress(SOCKET socket, u_short port);
 	static bool Listen(SOCKET socket, int backlog = SOMAXCONN);
 	static void CloseSocket(SOCKET& socket);
