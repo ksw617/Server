@@ -42,6 +42,9 @@
     <ClInclude Include="ServerService.h">
       <Filter>Network\Service</Filter>
     </ClInclude>
+    <ClInclude Include="ClientService.h">
+      <Filter>Network\Service</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -72,6 +75,9 @@
       <Filter>Network\Service</Filter>
     </ClCompile>
     <ClCompile Include="ServerService.cpp">
+      <Filter>Network\Service</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientService.cpp">
       <Filter>Network\Service</Filter>
     </ClCompile>
   </ItemGroup>

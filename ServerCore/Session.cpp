@@ -18,9 +18,12 @@ HANDLE Session::GetHandle()
 	return (HANDLE)socket;
 }
 
+
+
+
+
 bool Session::Connect()
 {
-	//Connect µî·Ï
 	return RegisterConnect();
 }
 
@@ -55,6 +58,8 @@ bool Session::RegisterConnect()
 
 void Session::ProcessConnect()
 {
+	connectEvent.iocpObj = nullptr;
+
 	connected.store(true);
 
 	GetService()->AddSession(this);
@@ -144,20 +149,6 @@ void Session::RegisterSend(SendEvent* sendEvent)
 	}
 }
 
-void Session::ObserveIO(IocpEvent* iocpEvent, int numOfBytes)
-{
-	switch (iocpEvent->eventType)
-	{
-	case EventType::RECV:
-		ProcessRecv(numOfBytes);
-		break;
-	case EventType::SEND:	
-		ProcessSend((SendEvent*)iocpEvent, numOfBytes);
-		break;
-	default:
-		break;
-	}
-}
 
 
 
@@ -177,6 +168,7 @@ void Session::ProcessSend(SendEvent* sendEvent, int numOfBytes)
 
 
 
+
 void Session::Disconnect(const WCHAR* cause)
 {
 	if (connected.exchange(false) == false)
@@ -185,10 +177,58 @@ void Session::Disconnect(const WCHAR* cause)
 	wprintf(L"disconnect reason : %ls\n", cause);
 
 	OnDisconnected();
-	SocketHelper::CloseSocket(socket);
+	//SocketHelper::CloseSocket(socket);
 	GetService()->RemoveSession(this);
-	
+
+	RegisterDisConnect();
 }
+
+bool Session::RegisterDisConnect()
+{
+	disConnectEvent.Init();
+	disConnectEvent.iocpObj = this;
+
+	if (SocketHelper::DisconnectEx(socket, &disConnectEvent, TF_REUSE_SOCKET, 0))
+	{
+		int errorCode = WSAGetLastError();
+		if (errorCode != WSA_IO_PENDING)
+		{
+			HandleError(errorCode);
+			disConnectEvent.iocpObj = nullptr;
+			return false;
+
+		}
+	}
+	return true;
+}
+
+void Session::ObserveIO(IocpEvent* iocpEvent, int numOfBytes)
+{
+	switch (iocpEvent->eventType)
+	{
+	case EventType::CONNECT:
+		ProcessConnect();
+		break;
+	case EventType::RECV:
+		ProcessRecv(numOfBytes);
+		break;
+	case EventType::SEND:
+		ProcessSend((SendEvent*)iocpEvent, numOfBytes);
+		break;
+	case EventType::DISCONNECT:
+		ProcessDisconnect();
+		break;
+	default:
+		break;
+	}
+}
+
+void Session::ProcessDisconnect()
+{
+	disConnectEvent.iocpObj = nullptr;
+}
+
+
 
 void Session::HandleError(int errorCode)
 {
@@ -196,9 +236,10 @@ void Session::HandleError(int errorCode)
 	{
 	case WSAECONNRESET:
 	case WSAECONNABORTED:
-		printf("Handle Error\n");
+		Disconnect(L"Handle Error");
 		break;
 	default:
+		printf("ErrorCode : %d\n", errorCode);
 		break;
 	}
 }

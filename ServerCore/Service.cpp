@@ -3,8 +3,8 @@
 #include "SocketHelper.h"
 #include "IocpCore.h"
 #include "Session.h"
-																 //Session* Factor() { return new ServerSession; }
-																//factor() -> new ServerSession
+																 //Session* Factor() { return new ClientSession; }
+																//factor() -> new ClientSession
 Service::Service(ServiceType type, wstring ip, u_short port, SessionFactory factory) : serviceType(type), sessionFactory(factory)
 {
 	if (!SocketHelper::StartUp())
@@ -14,11 +14,11 @@ Service::Service(ServiceType type, wstring ip, u_short port, SessionFactory fact
 	sockAddr.sin_family = AF_INET;	//Ipv4
 
 	IN_ADDR address;
-	InetPton(AF_INET, ip.c_str(), &address);
+	InetPton(AF_INET, ip.c_str(), &address); //127.0.0.1
 	sockAddr.sin_addr = address;
-	sockAddr.sin_port = htons(port);
+	sockAddr.sin_port = htons(port); //27015
 
-	iocpCore = new IocpCore;
+	iocpCore = new IocpCore;  //
 	sessionCount = 0;
 }
 

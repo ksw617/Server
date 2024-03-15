@@ -53,6 +53,7 @@ void Listener::CloseSocket()
 
 void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 {
+    //
     Session* session = serverService->CreateSession();
     acceptEvent->Init();
     acceptEvent->session = session;

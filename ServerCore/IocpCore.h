@@ -9,7 +9,7 @@ public:
 public:
 	HANDLE GetHandle() const { return iocpHandle; }
 public:
-	bool Register(class IocpObj* iocpObj);  // bool·Î ¹Ù²Þ
+	bool Register(class IocpObj* iocpObj);  
 	bool ObserveIO(DWORD time = INFINITE);
 };
 

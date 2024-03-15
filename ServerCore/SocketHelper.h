@@ -2,9 +2,10 @@
 class SocketHelper
 {
 public:
-	//비동기 connect 함수 포인터
 	static LPFN_CONNECTEX ConnectEx;
 	static LPFN_ACCEPTEX AcceptEx;
+	//비동기 disconnect 함수 포인터
+	static LPFN_DISCONNECTEX DisconnectEx;
 public:
 	static bool StartUp();
 	static void CleanUp();
@@ -17,7 +18,6 @@ public:
 	static bool SetUpdateAcceptSocket(SOCKET acceptSocket, SOCKET listenSocket);
 public:
 	static bool Bind(SOCKET socket, SOCKADDR_IN sockAddr);
-	//아무 주소 바인드
 	static bool BindAnyAddress(SOCKET socket, u_short port);
 	static bool Listen(SOCKET socket, int backlog = SOMAXCONN);
 	static void CloseSocket(SOCKET& socket);

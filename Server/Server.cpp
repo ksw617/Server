@@ -25,7 +25,7 @@ class ServerSession : public Session
 
 	virtual void OnDisconnected()
 	{
-		printf("On disconnected\n");
+		printf("OnDisconnected\n");
 	}
 
 };

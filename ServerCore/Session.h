@@ -14,9 +14,10 @@ private:
 	SOCKET socket = INVALID_SOCKET;
 	SOCKADDR_IN sockAddr = {};
 private:
-	//Connect 이벤트 추가
 	ConnectEvent connectEvent;
 	RecvEvent recvEvent;
+	//DisConnect 이벤트 추가
+	DisConnectEvent disConnectEvent;
 public:
 	BYTE recvBuffer[1024] = {};	 
 public:
@@ -33,14 +34,17 @@ public:
 	void SetService(Service* _service) { service = _service; }
 	void SetSockAddr(SOCKADDR_IN address) { sockAddr = address; }
 private:
-	//Connect 등록
 	bool RegisterConnect();
 	void RegisterRecv();
 	void RegisterSend(SendEvent* sendEvent);
+	//Disconnect 등록
+	bool RegisterDisConnect();
 private:
 	void ProcessConnect();
 	void ProcessRecv(int numOfBytes);
 	void ProcessSend(SendEvent* sendEvent, int numOfBytes);
+	//Disconnect 진행
+	void ProcessDisconnect();
 private:
 	void HandleError(int errorCode);
 protected:

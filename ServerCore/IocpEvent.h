@@ -22,7 +22,7 @@ public:
 	void Init();
 };
 
-//Connect 추가
+
 class ConnectEvent : public IocpEvent
 {
 public:
@@ -52,4 +52,11 @@ public:
 public:
 	SendEvent() : IocpEvent(EventType::SEND) {}
 
+};
+
+//DisConnect 추가
+class DisConnectEvent : public IocpEvent
+{
+public:
+	DisConnectEvent() : IocpEvent(EventType::DISCONNECT) {}
 };

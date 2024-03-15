@@ -5,7 +5,7 @@
 
 IocpCore::IocpCore()
 {
-	//积己
+	//iocp 秦甸 积己
 	iocpHandle = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, NULL, NULL);
 }
 

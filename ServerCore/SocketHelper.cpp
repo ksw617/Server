@@ -3,6 +3,7 @@
 
 LPFN_CONNECTEX SocketHelper::ConnectEx = nullptr;
 LPFN_ACCEPTEX SocketHelper::AcceptEx = nullptr;
+LPFN_DISCONNECTEX SocketHelper::DisconnectEx = nullptr;
 
 
 bool SocketHelper::StartUp()
@@ -15,6 +16,7 @@ bool SocketHelper::StartUp()
     //함수 포인터에 주소값 넣어줌
     SetIOControl(tempSocket, WSAID_CONNECTEX, (LPVOID*)&ConnectEx);
     SetIOControl(tempSocket, WSAID_ACCEPTEX, (LPVOID*)&AcceptEx);
+    SetIOControl(tempSocket, WSAID_DISCONNECTEX, (LPVOID*)&DisconnectEx);
     CloseSocket(tempSocket);
 
     return true;
