@@ -5,7 +5,6 @@
 
 IocpCore::IocpCore()
 {
-	//iocp 해들 생성
 	iocpHandle = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, NULL, NULL);
 }
 
@@ -14,7 +13,7 @@ IocpCore::~IocpCore()
 	CloseHandle(iocpHandle);
 }
 
-bool IocpCore::Register(IocpObj* iocpObj)
+bool IocpCore::Register(shared_ptr<IocpObj> iocpObj)
 {
 	return CreateIoCompletionPort(iocpObj->GetHandle(), iocpHandle, 0, 0);
 }
@@ -27,7 +26,7 @@ bool IocpCore::ObserveIO(DWORD time)
 
 	if (GetQueuedCompletionStatus(iocpHandle, &bytesTransferred, &key, (LPOVERLAPPED*)&iocpEvent, time))
 	{
-		IocpObj* iocpObj = iocpEvent->iocpObj;
+		shared_ptr<IocpObj> iocpObj = iocpEvent->iocpObj;
 		iocpObj->ObserveIO(iocpEvent, bytesTransferred);
 	}
 	else
@@ -37,6 +36,8 @@ bool IocpCore::ObserveIO(DWORD time)
 		case WAIT_TIMEOUT:
 			return false;
 		default:
+			shared_ptr<IocpObj> iocpObj = iocpEvent->iocpObj;
+			iocpObj->ObserveIO(iocpEvent, bytesTransferred);
 			break;
 		}
 

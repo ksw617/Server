@@ -4,7 +4,6 @@ class SocketHelper
 public:
 	static LPFN_CONNECTEX ConnectEx;
 	static LPFN_ACCEPTEX AcceptEx;
-	//비동기 disconnect 함수 포인터
 	static LPFN_DISCONNECTEX DisconnectEx;
 public:
 	static bool StartUp();

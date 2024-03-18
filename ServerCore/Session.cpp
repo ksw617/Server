@@ -37,7 +37,7 @@ bool Session::RegisterConnect()
 		return false;
 
 	connectEvent.Init();
-	connectEvent.iocpObj = this;
+	connectEvent.iocpObj = shared_from_this();
 
 	DWORD numOfBytes = 0;
 	SOCKADDR_IN sockAddr = GetService()->GetSockAddr();
@@ -61,8 +61,8 @@ void Session::ProcessConnect()
 	connectEvent.iocpObj = nullptr;
 
 	connected.store(true);
-
-	GetService()->AddSession(this);
+	//GetSessionÀ¸·Î ¹Ù²Þ
+	GetService()->AddSession(GetSession());
 
 	OnConnected();
 
@@ -76,7 +76,7 @@ void Session::RegisterRecv()
 		return;
 
 	recvEvent.Init();
-	recvEvent.iocpObj = this;
+	recvEvent.iocpObj = shared_from_this();
 
 	WSABUF wsaBuf;
 	wsaBuf.buf = (char*)recvBuffer;
@@ -115,7 +115,7 @@ void Session::ProcessRecv(int numOfBytes)
 void Session::Send(BYTE* buffer, int len)
 {
 	SendEvent* sendEvent = new SendEvent();
-	sendEvent->iocpObj = this;
+	sendEvent->iocpObj = shared_from_this();
 	sendEvent->sendBuffer.resize(len);
 	memcpy(sendEvent->sendBuffer.data(), buffer, len);
 
@@ -177,8 +177,9 @@ void Session::Disconnect(const WCHAR* cause)
 	wprintf(L"disconnect reason : %ls\n", cause);
 
 	OnDisconnected();
-	//SocketHelper::CloseSocket(socket);
-	GetService()->RemoveSession(this);
+
+	//GetSessionÀ¸·Î ¹Ù²Þ
+	GetService()->RemoveSession(GetSession());
 
 	RegisterDisConnect();
 }
@@ -186,7 +187,7 @@ void Session::Disconnect(const WCHAR* cause)
 bool Session::RegisterDisConnect()
 {
 	disConnectEvent.Init();
-	disConnectEvent.iocpObj = this;
+	disConnectEvent.iocpObj = shared_from_this();
 
 	if (SocketHelper::DisconnectEx(socket, &disConnectEvent, TF_REUSE_SOCKET, 0))
 	{

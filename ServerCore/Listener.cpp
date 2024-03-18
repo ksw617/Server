@@ -12,7 +12,8 @@ Listener::~Listener()
     CloseSocket();
 }
 
-bool Listener::StartAccept(ServerService* service)
+//스마트 포인터로 변환
+bool Listener::StartAccept(shared_ptr<ServerService> service)
 {
     serverService = service;
 
@@ -28,7 +29,9 @@ bool Listener::StartAccept(ServerService* service)
     
 
     ULONG_PTR key = 0;
-    service->GetIocpCore()->Register(this);
+    //this-> shared_from_this() 변환 : 스마트 포인터로 레퍼 관리 할려고
+    if (service->GetIocpCore()->Register(shared_from_this()) == false)
+        return false;
 
    if (!SocketHelper::Bind(socket, service->GetSockAddr()))
        return false;
@@ -40,7 +43,8 @@ bool Listener::StartAccept(ServerService* service)
 
 
    AcceptEvent* acceptEvent = new AcceptEvent();
-   acceptEvent->iocpObj = this;
+   //this-> shared_from_this() 변환 : 스마트 포인터로 레퍼 관리 할려고
+   acceptEvent->iocpObj = shared_from_this();
    RegisterAccept(acceptEvent);
 
     return true;
@@ -53,8 +57,8 @@ void Listener::CloseSocket()
 
 void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 {
-    //
-    Session* session = serverService->CreateSession();
+    //스마트 포인터로 관리
+    shared_ptr<Session> session = serverService->CreateSession();
     acceptEvent->Init();
     acceptEvent->session = session;
 
@@ -71,7 +75,8 @@ void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 
 void Listener::ProcessAccept(AcceptEvent* acceptEvent)
 {
-    Session* session = acceptEvent->session;
+    //스마트 포인터로 관리
+    shared_ptr<Session> session = acceptEvent->session;
     if (!SocketHelper::SetUpdateAcceptSocket(session->GetSocket(), socket))
     {
         printf("UpdateAcceptSocket Error\n");

@@ -15,7 +15,8 @@ class IocpEvent	: public OVERLAPPED
 {
 public:
 	EventType eventType;
-	class IocpObj* iocpObj;
+	//스마트 포인터로 전환
+	shared_ptr<class IocpObj> iocpObj;
 public:
 	IocpEvent(EventType type);
 public:
@@ -32,7 +33,8 @@ public:
 class AcceptEvent : public IocpEvent
 {
 public:
-	Session* session = nullptr;
+	//스마트 포인터로 전환
+	shared_ptr<Session> session = nullptr;
 public:
 	AcceptEvent() : IocpEvent(EventType::ACCEPT) {}
 };
@@ -54,7 +56,7 @@ public:
 
 };
 
-//DisConnect 추가
+
 class DisConnectEvent : public IocpEvent
 {
 public:

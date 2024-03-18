@@ -7,9 +7,14 @@
 
 char sendBuffer[] = "Hello This is Client";
 
-class ClinetSession : public Session
+class ClientSession : public Session
 {
 public:
+	//소멸자 호출
+	~ClientSession()
+	{
+		printf("ClientSession Destroy\n");
+	}
 	virtual void OnConnected() override
 	{
 		printf("Connected to Server\n");
@@ -42,7 +47,9 @@ public:
 
 int main()
 {
-	Service* service = new ClientService(L"127.0.0.1", 27015, []() {return new ClinetSession; });
+	this_thread::sleep_for(1s);
+
+	shared_ptr<Service> service = make_shared<ClientService>(L"127.0.0.1", 27015, []() {return make_shared<ClientSession>(); });
 
 		if (!service->Start())
 		{
@@ -61,7 +68,8 @@ int main()
 
 		t.join();
 
-		delete service;
+		//필요 없음
+		//delete service;
 
 		return 0;
 }

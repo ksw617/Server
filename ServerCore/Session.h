@@ -10,13 +10,12 @@ class Session : public IocpObj
 private:
 	shared_mutex rwLock;
 	atomic<bool> connected = false;
-	Service* service = nullptr;
+	shared_ptr<Service> service = nullptr;
 	SOCKET socket = INVALID_SOCKET;
 	SOCKADDR_IN sockAddr = {};
 private:
 	ConnectEvent connectEvent;
 	RecvEvent recvEvent;
-	//DisConnect 이벤트 추가
 	DisConnectEvent disConnectEvent;
 public:
 	BYTE recvBuffer[1024] = {};	 
@@ -29,21 +28,22 @@ private:
 public:
 	SOCKET GetSocket() const { return socket; }
 	bool IsConnected() const { return connected; }
-	Service* GetService() const { return service; }
+
+	shared_ptr<Service> GetService() const { return service; }
+	shared_ptr<Session> GetSession() {  return static_pointer_cast<Session>(shared_from_this()); }
 public:
-	void SetService(Service* _service) { service = _service; }
+
+	void SetService(shared_ptr<Service> _service) { service = _service; }
 	void SetSockAddr(SOCKADDR_IN address) { sockAddr = address; }
 private:
 	bool RegisterConnect();
 	void RegisterRecv();
 	void RegisterSend(SendEvent* sendEvent);
-	//Disconnect 등록
 	bool RegisterDisConnect();
 private:
 	void ProcessConnect();
 	void ProcessRecv(int numOfBytes);
 	void ProcessSend(SendEvent* sendEvent, int numOfBytes);
-	//Disconnect 진행
 	void ProcessDisconnect();
 private:
 	void HandleError(int errorCode);
@@ -53,7 +53,6 @@ protected:
 	virtual void OnSend(int len) {}
 	virtual void OnDisconnected() {}
 public:
-	//연결 할 아이
 	bool Connect();
 	void Send(BYTE* buffer, int len);
 	void Disconnect(const WCHAR* cause);

@@ -7,14 +7,15 @@ class AcceptEvent;
 class Listener : public IocpObj
 {
 private:
-	ServerService* serverService = nullptr;
+	//스마트 포인터로 변환
+	shared_ptr<ServerService> serverService = nullptr;
 	SOCKET socket = INVALID_SOCKET;
 public:
 	Listener() {}
-	//virtual 소멸자
 	virtual ~Listener();
 public:
-	bool StartAccept(ServerService* service);
+	//스마트 포인터로 변환
+	bool StartAccept(shared_ptr<ServerService> service);
 	void CloseSocket();
 public:
 	void RegisterAccept(AcceptEvent* acceptEvent);

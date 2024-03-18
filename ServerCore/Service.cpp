@@ -3,40 +3,34 @@
 #include "SocketHelper.h"
 #include "IocpCore.h"
 #include "Session.h"
-																 //Session* Factor() { return new ClientSession; }
-																//factor() -> new ClientSession
+
 Service::Service(ServiceType type, wstring ip, u_short port, SessionFactory factory) : serviceType(type), sessionFactory(factory)
 {
 	if (!SocketHelper::StartUp())
 		return;
 
 	memset(&sockAddr, 0, sizeof(sockAddr));
-	sockAddr.sin_family = AF_INET;	//Ipv4
+	sockAddr.sin_family = AF_INET;	
 
 	IN_ADDR address;
-	InetPton(AF_INET, ip.c_str(), &address); //127.0.0.1
+	InetPton(AF_INET, ip.c_str(), &address); 
 	sockAddr.sin_addr = address;
-	sockAddr.sin_port = htons(port); //27015
+	sockAddr.sin_port = htons(port); 
 
-	iocpCore = new IocpCore;  //
+	iocpCore = make_shared<IocpCore>();
 	sessionCount = 0;
 }
 
 Service::~Service()
 {
-	if (iocpCore != nullptr)
-	{
-		SocketHelper::CleanUp();
-		delete iocpCore;
-		iocpCore = nullptr;
-	}
-
+	SocketHelper::CleanUp();
 }
 
-Session* Service::CreateSession()
+shared_ptr<Session> Service::CreateSession()
 {				
-	Session* session = sessionFactory();
-	session->SetService(this);   // 여기로 변경
+	shared_ptr<Session> session = sessionFactory();
+	//스마트포인터용 내 & 부모 주소 
+	session->SetService(shared_from_this());
 
 	if (!iocpCore->Register(session))
 	{
@@ -46,14 +40,14 @@ Session* Service::CreateSession()
 	return session;
 }
 
-void Service::AddSession(Session* session)
+void Service::AddSession(shared_ptr<Session> session)
 {
 	unique_lock<shared_mutex> lock(rwLock);
 	sessionCount++;
 	sessions.insert(session);
 }
 
-void Service::RemoveSession(Session* session)
+void Service::RemoveSession(shared_ptr<Session> session)
 {
 	unique_lock<shared_mutex> lock(rwLock);
 	sessions.erase(session);

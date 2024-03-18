@@ -5,9 +5,14 @@
 
 class ServerSession : public Session
 {
+public:
+	~ServerSession()
+	{
+		printf("ServerSession Destroy\n");
+	}
 	virtual void OnConnected() override 
 	{
-		cout << "Server Session" << endl;
+		printf("OnConnected\n");
 	}
 
 	virtual int OnRecv(BYTE* buffer, int len) override
@@ -36,8 +41,8 @@ int main()
 {
 	printf("============= SERVER =============\n");
 
-	//ServerService(ip주소, port번호, (함수))
-	Service* service = new ServerService(L"127.0.0.1", 27015, []() {return new ServerSession; });
+	//스마트 포인터로 변환	  ServerService &  ServerSession
+	shared_ptr<Service> service = make_shared<ServerService>(L"127.0.0.1", 27015, []() {return make_shared<ServerSession>(); });
 	if (!service->Start())
 	{
 		printf("Server Start Error\n");
@@ -56,7 +61,8 @@ int main()
 
 	t.join();
 
-	delete service;
+	//필요 없음
+	//delete service;
 
 	return 0;
 

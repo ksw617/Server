@@ -8,6 +8,7 @@ ServerService::ServerService(wstring ip, u_short port, SessionFactory factory) :
 
 bool ServerService::Start()
 {
-    listener = new Listener;
-    return (listener->StartAccept(this));
+    listener = make_shared<Listener>();
+    //shared_from_this()-> Service狼 林家 -> static_pointer_cast<ServerService>(Service狼 林家) -> ServerService狼 林家 
+    return (listener->StartAccept(static_pointer_cast<ServerService>(shared_from_this())));
 }
