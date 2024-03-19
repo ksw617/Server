@@ -15,7 +15,6 @@ class IocpEvent	: public OVERLAPPED
 {
 public:
 	EventType eventType;
-	//스마트 포인터로 전환
 	shared_ptr<class IocpObj> iocpObj;
 public:
 	IocpEvent(EventType type);
@@ -33,7 +32,6 @@ public:
 class AcceptEvent : public IocpEvent
 {
 public:
-	//스마트 포인터로 전환
 	shared_ptr<Session> session = nullptr;
 public:
 	AcceptEvent() : IocpEvent(EventType::ACCEPT) {}
@@ -50,7 +48,10 @@ public:
 class SendEvent : public IocpEvent
 {
 public:
-	vector<BYTE> sendBuffer;
+	//sendBuffer class 변환
+	//vector<SendBuffer*>
+	vector<shared_ptr<class SendBuffer>> sendBuffers;
+	//vector<BYTE> sendBuffer;
 public:
 	SendEvent() : IocpEvent(EventType::SEND) {}
 

@@ -3,7 +3,7 @@
 #include "SocketHelper.h"
 #include "Service.h"
 
-Session::Session()
+Session::Session() : recvBuffer(BUFFER_SIZE) // 생성자 호출되면서 초기화
 {
 	socket = SocketHelper::CreateSocket();
 }
@@ -19,9 +19,6 @@ HANDLE Session::GetHandle()
 }
 
 
-
-
-
 bool Session::Connect()
 {
 	return RegisterConnect();
@@ -32,6 +29,8 @@ bool Session::RegisterConnect()
 	if (IsConnected())
 		return false;
 	if (GetService()->GetServiceType() != ServiceType::CLIENT)
+		return false;
+	if (!SocketHelper::SetReuseAddress(socket, true))
 		return false;
 	if (SocketHelper::BindAnyAddress(socket, 0) == false)
 		return false;
@@ -61,7 +60,6 @@ void Session::ProcessConnect()
 	connectEvent.iocpObj = nullptr;
 
 	connected.store(true);
-	//GetSession으로 바꿈
 	GetService()->AddSession(GetSession());
 
 	OnConnected();
@@ -79,8 +77,8 @@ void Session::RegisterRecv()
 	recvEvent.iocpObj = shared_from_this();
 
 	WSABUF wsaBuf;
-	wsaBuf.buf = (char*)recvBuffer;
-	wsaBuf.len = sizeof(recvBuffer);
+	wsaBuf.buf = (char*)recvBuffer.WritePos();
+	wsaBuf.len = recvBuffer.FreeSize();
 
 	DWORD recvLen = 0;
 	DWORD flags = 0;
@@ -96,6 +94,27 @@ void Session::RegisterRecv()
 	}
 }
 
+void Session::ObserveIO(IocpEvent* iocpEvent, int numOfBytes)
+{
+	switch (iocpEvent->eventType)
+	{
+	case EventType::CONNECT:
+		ProcessConnect();
+		break;
+	case EventType::RECV:
+		ProcessRecv(numOfBytes);
+		break;
+	case EventType::SEND:
+		ProcessSend(numOfBytes);
+		break;
+	case EventType::DISCONNECT:
+		ProcessDisconnect();
+		break;
+	default:
+		break;
+	}
+}
+
 void Session::ProcessRecv(int numOfBytes)
 {
 	recvEvent.iocpObj = nullptr;
@@ -106,62 +125,79 @@ void Session::ProcessRecv(int numOfBytes)
 		return;
 	}
 
-	OnRecv(recvBuffer, numOfBytes);
+	if (recvBuffer.OnWrite(numOfBytes) == false)
+	{
+		Disconnect(L"On Write overflow");
+		return;
+	}
+
+	int dataSize = recvBuffer.DataSize();
+
+	int processLen = OnRecv(recvBuffer.ReadPos(), numOfBytes);
+	if (processLen < 0 || dataSize < processLen || recvBuffer.OnRead(processLen) == false)
+	{
+		Disconnect(L"On Read overflow");
+		return;
+	}
+
+	recvBuffer.Clear();
+
 	RegisterRecv();
 }
 
 
 
-void Session::Send(BYTE* buffer, int len)
+//수정
+void Session::Send(shared_ptr<SendBuffer> sendBuffer)
 {
-	SendEvent* sendEvent = new SendEvent();
-	sendEvent->iocpObj = shared_from_this();
-	sendEvent->sendBuffer.resize(len);
-	memcpy(sendEvent->sendBuffer.data(), buffer, len);
-
 	unique_lock<shared_mutex> lock(rwLock);
-	RegisterSend(sendEvent);
+
+	sendQueue.push(sendBuffer);
+	if (sendReistered.exchange(true) == false)
+	{
+		RegisterSend();
+	}
 
 }
 
-void Session::RegisterSend(SendEvent* sendEvent)
+void Session::RegisterSend()
 {
 
 	if (IsConnected() == false)
 		return;
 
 	WSABUF wsaBuf;
-	wsaBuf.buf = (char*)sendEvent->sendBuffer.data();
-	wsaBuf.len = (ULONG)sendEvent->sendBuffer.size();
-
-	DWORD numOfBytes = 0;
-	if (WSASend(socket, &wsaBuf, 1, &numOfBytes, 0, sendEvent, nullptr) == SOCKET_ERROR)
-	{
-		int errorCode = WSAGetLastError();
-		if (errorCode != WSA_IO_PENDING)
-		{
-			HandleError(errorCode);
-			sendEvent->iocpObj = nullptr;
-			delete sendEvent;
-
-		}
-
-	}
+	//wsaBuf.buf = (char*)sendEvent->sendBuffer.data();
+	//wsaBuf.len = (ULONG)sendEvent->sendBuffer.size();
+	//
+	//DWORD numOfBytes = 0;
+	//if (WSASend(socket, &wsaBuf, 1, &numOfBytes, 0, sendEvent, nullptr) == SOCKET_ERROR)
+	//{
+	//	int errorCode = WSAGetLastError();
+	//	if (errorCode != WSA_IO_PENDING)
+	//	{
+	//		HandleError(errorCode);
+	//		sendEvent->iocpObj = nullptr;
+	//		delete sendEvent;
+	//
+	//	}
+	//
+	//}
 }
 
 
 
 
-void Session::ProcessSend(SendEvent* sendEvent, int numOfBytes)
+void Session::ProcessSend(int numOfBytes)
 {
-	sendEvent->iocpObj = nullptr;
-	delete sendEvent;
-
-	if (numOfBytes == 0)
-	{
-		Disconnect(L"Send 0 bytes");
-
-	}
+	//sendEvent->iocpObj = nullptr;
+	//delete sendEvent;
+	//
+	//if (numOfBytes == 0)
+	//{
+	//	Disconnect(L"Send 0 bytes");
+	//
+	//}
 
 	OnSend(numOfBytes);
 }
@@ -178,7 +214,6 @@ void Session::Disconnect(const WCHAR* cause)
 
 	OnDisconnected();
 
-	//GetSession으로 바꿈
 	GetService()->RemoveSession(GetSession());
 
 	RegisterDisConnect();
@@ -203,26 +238,7 @@ bool Session::RegisterDisConnect()
 	return true;
 }
 
-void Session::ObserveIO(IocpEvent* iocpEvent, int numOfBytes)
-{
-	switch (iocpEvent->eventType)
-	{
-	case EventType::CONNECT:
-		ProcessConnect();
-		break;
-	case EventType::RECV:
-		ProcessRecv(numOfBytes);
-		break;
-	case EventType::SEND:
-		ProcessSend((SendEvent*)iocpEvent, numOfBytes);
-		break;
-	case EventType::DISCONNECT:
-		ProcessDisconnect();
-		break;
-	default:
-		break;
-	}
-}
+
 
 void Session::ProcessDisconnect()
 {

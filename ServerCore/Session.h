@@ -1,11 +1,14 @@
 #pragma once
 #include "IocpObj.h"
+#include "RecvBuffer.h"
+#include "SendBuffer.h"
 
 class Service;
 
 class Session : public IocpObj
 {
 	friend class Listener;
+	enum {BUFFER_SIZE = 0x10000}; 
 
 private:
 	shared_mutex rwLock;
@@ -16,9 +19,15 @@ private:
 private:
 	ConnectEvent connectEvent;
 	RecvEvent recvEvent;
+	//SendEvent 추가
+	SendEvent sendEvent;
 	DisConnectEvent disConnectEvent;
 public:
-	BYTE recvBuffer[1024] = {};	 
+	RecvBuffer recvBuffer;
+	//sendBuffer queue 추가
+	queue<shared_ptr<SendBuffer>> sendQueue;
+	//atomic으로 내가 보냈는지 안보냈는지
+	atomic<bool> sendReistered = false;
 public:
 	Session();
 	virtual ~Session();
@@ -38,12 +47,14 @@ public:
 private:
 	bool RegisterConnect();
 	void RegisterRecv();
-	void RegisterSend(SendEvent* sendEvent);
+	//SendEvent 들구 있을꺼라
+	void RegisterSend();
 	bool RegisterDisConnect();
 private:
 	void ProcessConnect();
 	void ProcessRecv(int numOfBytes);
-	void ProcessSend(SendEvent* sendEvent, int numOfBytes);
+	//SendEvent 들구 있을꺼라
+	void ProcessSend(int numOfBytes);
 	void ProcessDisconnect();
 private:
 	void HandleError(int errorCode);
@@ -54,7 +65,8 @@ protected:
 	virtual void OnDisconnected() {}
 public:
 	bool Connect();
-	void Send(BYTE* buffer, int len);
+	//Send 수정
+	void Send(shared_ptr<SendBuffer> sendBuffer);
 	void Disconnect(const WCHAR* cause);
 
 };
