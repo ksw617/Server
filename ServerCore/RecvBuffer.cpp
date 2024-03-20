@@ -3,9 +3,8 @@
 
 RecvBuffer::RecvBuffer(int size)  : bufferSize(size)
 {
-    //엄청나게 큰 공간 할당
     capacity = bufferSize * BUFFER_COUNT;
-    buffer.resize(bufferSize); 
+    buffer.resize(capacity);
 }
 
 RecvBuffer::~RecvBuffer()
@@ -14,7 +13,6 @@ RecvBuffer::~RecvBuffer()
 
 void RecvBuffer::Clear()
 {           
-    //만날 확률을 높이는 방식
     int dataSize = DataSize();  
     if (dataSize == 0)         
     {
@@ -23,10 +21,8 @@ void RecvBuffer::Clear()
     }
     else
     {
-        //[   ][   ][   ][   ][   ][   ][   ][   ][   ][r w ] 
         if (FreeSize() < bufferSize)
         {
-            //복사 진행
             memcpy(&buffer[0], &buffer[readPos], dataSize);
             readPos = 0;
             writePos = dataSize;

@@ -2,6 +2,7 @@
 #include <IocpCore.h>
 #include <ServerService.h>
 #include <Session.h>
+#include <SendBuffer.h>
 
 class ServerSession : public Session
 {
@@ -19,7 +20,13 @@ public:
 	{
 		printf("OnRecv : %s, On Recv Len : %d\n", buffer, len);
 
-		Send(buffer, len);
+		shared_ptr<SendBuffer> sendBuffer = make_shared<SendBuffer>(4096);
+								  
+		if (sendBuffer->CopyData(buffer, len))
+		{
+			Send(sendBuffer);
+		}
+
 		return len;
 	}
 
@@ -41,7 +48,6 @@ int main()
 {
 	printf("============= SERVER =============\n");
 
-	//스마트 포인터로 변환	  ServerService &  ServerSession
 	shared_ptr<Service> service = make_shared<ServerService>(L"127.0.0.1", 27015, []() {return make_shared<ServerSession>(); });
 	if (!service->Start())
 	{
@@ -60,9 +66,6 @@ int main()
 	);
 
 	t.join();
-
-	//필요 없음
-	//delete service;
 
 	return 0;
 

@@ -5,7 +5,7 @@
 #include <Session.h>
 #include <IocpCore.h>
 
-char sendBuffer[] = "Hello This is Client";
+char sendData[] = "Hello This is Client";
 
 class ClientSession : public Session
 {
@@ -18,7 +18,11 @@ public:
 	virtual void OnConnected() override
 	{
 		printf("Connected to Server\n");
-		Send((BYTE*)sendBuffer, sizeof(sendBuffer));
+		shared_ptr<SendBuffer> sendBuffer = make_shared<SendBuffer>(4096);
+		if (sendBuffer->CopyData(sendData, sizeof(sendData)))
+		{
+			Send(sendBuffer);
+		}
 	}
 
 	virtual int OnRecv(BYTE* buffer, int len) override
@@ -27,7 +31,15 @@ public:
 
 		this_thread::sleep_for(1s);
 
-		Send(buffer, len);
+	
+		shared_ptr<SendBuffer> sendBuffer = make_shared<SendBuffer>(4096);
+		
+		//([][][][][][][][] )[][][][][][][]
+		if (sendBuffer->CopyData(buffer, len))
+		{
+			Send(sendBuffer);
+		}
+		
 
 		return len;
 	}

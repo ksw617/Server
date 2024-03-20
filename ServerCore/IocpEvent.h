@@ -48,10 +48,7 @@ public:
 class SendEvent : public IocpEvent
 {
 public:
-	//sendBuffer class º¯È¯
-	//vector<SendBuffer*>
 	vector<shared_ptr<class SendBuffer>> sendBuffers;
-	//vector<BYTE> sendBuffer;
 public:
 	SendEvent() : IocpEvent(EventType::SEND) {}
 

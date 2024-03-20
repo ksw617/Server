@@ -3,7 +3,7 @@
 #include "SocketHelper.h"
 #include "Service.h"
 
-Session::Session() : recvBuffer(BUFFER_SIZE) // 생성자 호출되면서 초기화
+Session::Session() : recvBuffer(BUFFER_SIZE) 
 {
 	socket = SocketHelper::CreateSocket();
 }
@@ -60,6 +60,7 @@ void Session::ProcessConnect()
 	connectEvent.iocpObj = nullptr;
 
 	connected.store(true);
+
 	GetService()->AddSession(GetSession());
 
 	OnConnected();
@@ -94,26 +95,7 @@ void Session::RegisterRecv()
 	}
 }
 
-void Session::ObserveIO(IocpEvent* iocpEvent, int numOfBytes)
-{
-	switch (iocpEvent->eventType)
-	{
-	case EventType::CONNECT:
-		ProcessConnect();
-		break;
-	case EventType::RECV:
-		ProcessRecv(numOfBytes);
-		break;
-	case EventType::SEND:
-		ProcessSend(numOfBytes);
-		break;
-	case EventType::DISCONNECT:
-		ProcessDisconnect();
-		break;
-	default:
-		break;
-	}
-}
+
 
 void Session::ProcessRecv(int numOfBytes)
 {
@@ -146,60 +128,118 @@ void Session::ProcessRecv(int numOfBytes)
 }
 
 
-
 //수정
+
 void Session::Send(shared_ptr<SendBuffer> sendBuffer)
 {
-	unique_lock<shared_mutex> lock(rwLock);
+	if (!IsConnected())
+		return;
 
-	sendQueue.push(sendBuffer);
-	if (sendReistered.exchange(true) == false)
+	bool registerSend = false;
+
+	{
+		unique_lock<shared_mutex> lock(rwLock);
+		sendQueue.push(sendBuffer);
+		if (sendReistered.exchange(true) == false)
+		{
+			registerSend = true;
+		}
+
+	}
+	
+
+	if (registerSend)
 	{
 		RegisterSend();
 	}
-
 }
 
 void Session::RegisterSend()
 {
 
-	if (IsConnected() == false)
+	if (!IsConnected())
 		return;
-
-	WSABUF wsaBuf;
-	//wsaBuf.buf = (char*)sendEvent->sendBuffer.data();
-	//wsaBuf.len = (ULONG)sendEvent->sendBuffer.size();
-	//
-	//DWORD numOfBytes = 0;
-	//if (WSASend(socket, &wsaBuf, 1, &numOfBytes, 0, sendEvent, nullptr) == SOCKET_ERROR)
-	//{
-	//	int errorCode = WSAGetLastError();
-	//	if (errorCode != WSA_IO_PENDING)
-	//	{
-	//		HandleError(errorCode);
-	//		sendEvent->iocpObj = nullptr;
-	//		delete sendEvent;
-	//
-	//	}
-	//
-	//}
+	
+	sendEvent.Init();
+	sendEvent.iocpObj = shared_from_this();
+	
+	int writeSize = 0;
+	while (!sendQueue.empty())
+	{
+		shared_ptr<SendBuffer> sendBuffer = sendQueue.front();
+		writeSize += sendBuffer->WriteSize();
+	
+		sendQueue.pop();
+		sendEvent.sendBuffers.push_back(sendBuffer);
+	
+	}
+	
+	vector<WSABUF> wsaBufs;
+	wsaBufs.reserve(sendEvent.sendBuffers.size());		 
+	for (auto& sendBuffer : sendEvent.sendBuffers)
+	{
+		WSABUF wsaBuf{};
+		wsaBuf.buf = (char*)sendBuffer->GetBuffer();
+		wsaBuf.len = (ULONG)sendBuffer->WriteSize();
+		wsaBufs.push_back(wsaBuf);
+	
+	}
+	
+	DWORD numOfBytes = 0;
+	if (WSASend(socket, wsaBufs.data(), (DWORD)wsaBufs.size(), &numOfBytes, 0, &sendEvent, nullptr) == SOCKET_ERROR)
+	{
+		int errorCode = WSAGetLastError();
+		if (errorCode != WSA_IO_PENDING)
+		{
+			HandleError(errorCode);
+			sendEvent.iocpObj = nullptr;
+			sendEvent.sendBuffers.clear();
+			sendReistered.store(false);
+		}
+	
+	}
 }
 
-
+void Session::ObserveIO(IocpEvent* iocpEvent, int numOfBytes)
+{
+	switch (iocpEvent->eventType)
+	{
+	case EventType::CONNECT:
+		ProcessConnect();
+		break;
+	case EventType::RECV:
+		ProcessRecv(numOfBytes);
+		break;
+	case EventType::SEND:
+		ProcessSend(numOfBytes);
+		break;
+	case EventType::DISCONNECT:
+		ProcessDisconnect();
+		break;
+	default:
+		break;
+	}
+}
 
 
 void Session::ProcessSend(int numOfBytes)
 {
-	//sendEvent->iocpObj = nullptr;
-	//delete sendEvent;
-	//
-	//if (numOfBytes == 0)
-	//{
-	//	Disconnect(L"Send 0 bytes");
-	//
-	//}
+	sendEvent.iocpObj = nullptr;
+	sendEvent.sendBuffers.clear();
+	
+	if (numOfBytes == 0)
+	{
+		Disconnect(L"Send 0 bytes");
+	
+	}
 
 	OnSend(numOfBytes);
+	
+	unique_lock<shared_mutex> lock(rwLock);
+	if (sendQueue.empty())
+		sendReistered.store(false);
+	else
+		RegisterSend();
 }
 
 
@@ -244,8 +284,6 @@ void Session::ProcessDisconnect()
 {
 	disConnectEvent.iocpObj = nullptr;
 }
-
-
 
 void Session::HandleError(int errorCode)
 {
