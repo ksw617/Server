@@ -160,6 +160,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="RecvBuffer.h" />
     <ClInclude Include="SendBuffer.h" />
+    <ClInclude Include="SendBufferChunk.h" />
     <ClInclude Include="SendBufferManager.h" />
     <ClInclude Include="ServerService.h" />
     <ClInclude Include="Service.h" />
@@ -181,6 +182,7 @@
     </ClCompile>
     <ClCompile Include="RecvBuffer.cpp" />
     <ClCompile Include="SendBuffer.cpp" />
+    <ClCompile Include="SendBufferChunk.cpp" />
     <ClCompile Include="SendBufferManager.cpp" />
     <ClCompile Include="ServerService.cpp" />
     <ClCompile Include="Service.cpp" />

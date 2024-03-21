@@ -1,23 +1,27 @@
 #pragma once
 #include "SendBuffer.h"
-
-class SendBufferChunk : public enable_shared_from_this<SendBufferChunk>
-{
-	enum {SEND_BUFFER_SIZE = 0x10000};
-private:
-	vector<BYTE> buffer;
-public:
-	SendBufferChunk() : buffer(SEND_BUFFER_SIZE) {}
-	~SendBufferChunk() {}
-};
-
-
+#include "SendBufferChunk.h"
 
 class SendBufferManager
 {
 private:
+	SendBufferManager() = default;
+	~SendBufferManager() = default;
+public:
+	static SendBufferManager& Get()
+	{
+		static SendBufferManager instance;
+		return instance;
+	}
+public:
+	SendBufferManager(const SendBufferManager&) = delete;
+	SendBufferManager& operator= (const SendBufferManager&) = delete;
+
+private:
 	shared_mutex rwLock;
 	vector<shared_ptr<SendBufferChunk>> sendBufferChunks;
+public:
+	static thread_local shared_ptr<SendBufferChunk> localSendBufferChunk;
 public:
 	shared_ptr<SendBuffer> Open(int size);
 public:
@@ -25,4 +29,3 @@ public:
 	void Push(shared_ptr<SendBufferChunk> bufferChunk);
 	static void PushGlobal(SendBufferChunk* bufferChunck);
 };
-

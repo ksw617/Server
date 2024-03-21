@@ -4,6 +4,7 @@
 #include <ClientService.h>
 #include <Session.h>
 #include <IocpCore.h>
+#include <SendBufferManager.h>
 
 char sendData[] = "Hello This is Client";
 
@@ -17,9 +18,10 @@ public:
 	}
 	virtual void OnConnected() override
 	{
-		printf("Connected to Server\n");
-		shared_ptr<SendBuffer> sendBuffer = make_shared<SendBuffer>(4096);
-		if (sendBuffer->CopyData(sendData, sizeof(sendData)))
+		//printf("Connected to Server\n");
+		shared_ptr<SendBuffer> sendBuffer = SendBufferManager::Get().Open(4096);
+		memcpy(sendBuffer->GetBuffer(), sendData, sizeof(sendData));
+		if (sendBuffer->Close(sizeof(sendData)))
 		{
 			Send(sendBuffer);
 		}
@@ -27,26 +29,25 @@ public:
 
 	virtual int OnRecv(BYTE* buffer, int len) override
 	{
-		printf("OnRecv : %s, OnRecv Len : %d\n", (char*)buffer, len);
+		//printf("OnRecv : %s, OnRecv Len : %d\n", (char*)buffer, len);
 
-		this_thread::sleep_for(1s);
+		this_thread::sleep_for(0.1s);
 
-	
-		shared_ptr<SendBuffer> sendBuffer = make_shared<SendBuffer>(4096);
-		
-		//([][][][][][][][] )[][][][][][][]
-		if (sendBuffer->CopyData(buffer, len))
+
+		shared_ptr<SendBuffer> sendBuffer = SendBufferManager::Get().Open(4096);
+		memcpy(sendBuffer->GetBuffer(), buffer, len);
+		if (sendBuffer->Close(len))
 		{
 			Send(sendBuffer);
 		}
-		
+
 
 		return len;
 	}
 
 	virtual void OnSend(int len) override
 	{
-		printf("On Send Len : %d\n", len);
+		//printf("On Send Len : %d\n", len);
 	}
 
 
@@ -63,26 +64,28 @@ int main()
 
 	shared_ptr<Service> service = make_shared<ClientService>(L"127.0.0.1", 27015, []() {return make_shared<ClientSession>(); });
 
+	//1000명정도 접속 시작
+	for (int i = 0; i < 1000; i++)
+	{
 		if (!service->Start())
 		{
 			printf("Server Start Error\n");
 			return 1;
 		}
+	}
 
-		thread t([=]()
+
+	thread t([=]()
+		{
+			while (true)
 			{
-				while (true)
-				{
-					service->GetIocpCore()->ObserveIO();
-				}
+				service->GetIocpCore()->ObserveIO();
 			}
-		);
+		}
+	);
 
-		t.join();
+	t.join();
 
-		//필요 없음
-		//delete service;
-
-		return 0;
+	return 0;
 }
 

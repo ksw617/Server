@@ -2,7 +2,7 @@
 #include <IocpCore.h>
 #include <ServerService.h>
 #include <Session.h>
-#include <SendBuffer.h>
+#include <SendBufferManager.h>	 
 
 class ServerSession : public Session
 {
@@ -18,11 +18,14 @@ public:
 
 	virtual int OnRecv(BYTE* buffer, int len) override
 	{
-		printf("OnRecv : %s, On Recv Len : %d\n", buffer, len);
+		//printf("OnRecv : %s, On Recv Len : %d\n", buffer, len);
 
-		shared_ptr<SendBuffer> sendBuffer = make_shared<SendBuffer>(4096);
-								  
-		if (sendBuffer->CopyData(buffer, len))
+		shared_ptr<SendBuffer> sendBuffer = SendBufferManager::Get().Open(4096);
+
+
+		memcpy(sendBuffer->GetBuffer(), buffer, len);
+		  
+		if (sendBuffer->Close(len))
 		{
 			Send(sendBuffer);
 		}
@@ -32,7 +35,7 @@ public:
 
 	virtual void OnSend(int len) override
 	{
-		printf("OnSend Len : %d\n", len);
+		//printf("OnSend Len : %d\n", len);
 	}
 
 	virtual void OnDisconnected()
