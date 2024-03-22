@@ -1,10 +1,10 @@
 #include "pch.h"
 #include <IocpCore.h>
 #include <ServerService.h>
-#include <Session.h>
+#include <PacketSession.h>
 #include <SendBufferManager.h>	 
 
-class ServerSession : public Session
+class ServerSession : public PacketSession
 {
 public:
 	~ServerSession()
@@ -16,13 +16,10 @@ public:
 		printf("OnConnected\n");
 	}
 
-	virtual int OnRecv(BYTE* buffer, int len) override
+	virtual int OnRecvPacket(BYTE* buffer, int len) override
 	{
-		//printf("OnRecv : %s, On Recv Len : %d\n", buffer, len);
 
 		shared_ptr<SendBuffer> sendBuffer = SendBufferManager::Get().Open(4096);
-
-
 		memcpy(sendBuffer->GetBuffer(), buffer, len);
 		  
 		if (sendBuffer->Close(len))
@@ -30,12 +27,12 @@ public:
 			Send(sendBuffer);
 		}
 
+		printf("%s\n", &buffer[4]);
 		return len;
 	}
 
 	virtual void OnSend(int len) override
 	{
-		//printf("OnSend Len : %d\n", len);
 	}
 
 	virtual void OnDisconnected()

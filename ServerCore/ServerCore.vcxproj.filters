@@ -13,6 +13,9 @@
     <Filter Include="Network\Buffer">
       <UniqueIdentifier>{7df1875d-e3c0-4aee-aa9e-e8cc135b95ae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Network\Session">
+      <UniqueIdentifier>{356e31bf-d21c-4828-bbd5-f0acc3536f78}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -28,9 +31,6 @@
       <Filter>Network</Filter>
     </ClInclude>
     <ClInclude Include="IocpCore.h">
-      <Filter>Network</Filter>
-    </ClInclude>
-    <ClInclude Include="Session.h">
       <Filter>Network</Filter>
     </ClInclude>
     <ClInclude Include="IocpEvent.h">
@@ -60,6 +60,15 @@
     <ClInclude Include="SendBufferChunk.h">
       <Filter>Network\Buffer</Filter>
     </ClInclude>
+    <ClInclude Include="Types.h">
+      <Filter>pch</Filter>
+    </ClInclude>
+    <ClInclude Include="Session.h">
+      <Filter>Network\Session</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketSession.h">
+      <Filter>Network\Session</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -75,9 +84,6 @@
       <Filter>Network</Filter>
     </ClCompile>
     <ClCompile Include="IocpCore.cpp">
-      <Filter>Network</Filter>
-    </ClCompile>
-    <ClCompile Include="Session.cpp">
       <Filter>Network</Filter>
     </ClCompile>
     <ClCompile Include="IocpEvent.cpp">
@@ -106,6 +112,12 @@
     </ClCompile>
     <ClCompile Include="SendBufferChunk.cpp">
       <Filter>Network\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Session.cpp">
+      <Filter>Network\Session</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketSession.cpp">
+      <Filter>Network\Session</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

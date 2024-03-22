@@ -127,9 +127,6 @@ void Session::ProcessRecv(int numOfBytes)
 	RegisterRecv();
 }
 
-
-//수정
-
 void Session::Send(shared_ptr<SendBuffer> sendBuffer)
 {
 	if (!IsConnected())
@@ -252,11 +249,21 @@ void Session::Disconnect(const WCHAR* cause)
 
 	wprintf(L"disconnect reason : %ls\n", cause);
 
-	OnDisconnected();
-
-	GetService()->RemoveSession(GetSession());
+	//OnDisconnected();
+	//GetService()->RemoveSession(GetSession());
 
 	RegisterDisConnect();
+}
+
+
+
+void Session::ProcessDisconnect()
+{
+	disConnectEvent.iocpObj = nullptr;
+
+	//이동
+	OnDisconnected();
+	GetService()->RemoveSession(GetSession());
 }
 
 bool Session::RegisterDisConnect()
@@ -279,11 +286,6 @@ bool Session::RegisterDisConnect()
 }
 
 
-
-void Session::ProcessDisconnect()
-{
-	disConnectEvent.iocpObj = nullptr;
-}
 
 void Session::HandleError(int errorCode)
 {
