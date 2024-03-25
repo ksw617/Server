@@ -11,6 +11,9 @@
     <Filter Include="Main\Session">
       <UniqueIdentifier>{6e6b74b0-0992-4a27-bdf7-0adebebb6574}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Main\Protocol">
+      <UniqueIdentifier>{82a78558-0b4d-453a-8ebe-784eb9708025}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Server.cpp">
@@ -25,6 +28,9 @@
     <ClCompile Include="SessionManager.cpp">
       <Filter>Main\Session</Filter>
     </ClCompile>
+    <ClCompile Include="Protocol.pb.cc">
+      <Filter>Main\Protocol</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -36,5 +42,16 @@
     <ClInclude Include="SessionManager.h">
       <Filter>Main\Session</Filter>
     </ClInclude>
+    <ClInclude Include="Protocol.pb.h">
+      <Filter>Main\Protocol</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\protoc\bin\PacketGenerator.bat">
+      <Filter>Main\Protocol</Filter>
+    </None>
+    <None Include="..\protoc\bin\Protocol.proto">
+      <Filter>Main\Protocol</Filter>
+    </None>
   </ItemGroup>
 </Project>
