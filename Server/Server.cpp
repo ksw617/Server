@@ -1,71 +1,70 @@
 #include "pch.h"
 #include <IocpCore.h>
 #include <ServerService.h>
-#include <PacketSession.h>
-#include <SendBufferManager.h>	 
+#include <SendBufferManager.h>
 
-class ServerSession : public PacketSession
-{
-public:
-	~ServerSession()
-	{
-		printf("ServerSession Destroy\n");
-	}
-	virtual void OnConnected() override 
-	{
-		printf("OnConnected\n");
-	}
+#include "ClientSession.h"
+#include "SessionManager.h"
 
-	virtual int OnRecvPacket(BYTE* buffer, int len) override
-	{
-
-		shared_ptr<SendBuffer> sendBuffer = SendBufferManager::Get().Open(4096);
-		memcpy(sendBuffer->GetBuffer(), buffer, len);
-		  
-		if (sendBuffer->Close(len))
-		{
-			Send(sendBuffer);
-		}
-
-		printf("%s\n", &buffer[4]);
-		return len;
-	}
-
-	virtual void OnSend(int len) override
-	{
-	}
-
-	virtual void OnDisconnected()
-	{
-		printf("OnDisconnected\n");
-	}
-
-};
-
-
+#define THREAD_COUNT 5
 
 int main()
 {
 	printf("============= SERVER =============\n");
 
-	shared_ptr<Service> service = make_shared<ServerService>(L"127.0.0.1", 27015, []() {return make_shared<ServerSession>(); });
+	shared_ptr<Service> service = make_shared<ServerService>(L"127.0.0.1", 27015, []() {return make_shared<ClientSession>(); });
 	if (!service->Start())
 	{
 		printf("Server Start Error\n");
 		return 1;
 
 	}
+	
+	vector<thread> threads;
 
-	thread t([=]()
-		{
-			while (true)
+	for (int i = 0; i < THREAD_COUNT; i++)
+	{
+		threads.push_back(thread([=]()
 			{
-				service->GetIocpCore()->ObserveIO();
+				while (true)
+				{
+					service->GetIocpCore()->ObserveIO();
+				}
 			}
-		}
-	);
+		));
+	}
 
-	t.join();
+	BYTE sendData[1000] = "Hello world";
+
+	while (true)
+	{
+		shared_ptr<SendBuffer> sendBuffer = SendBufferManager::Get().Open(4096);
+
+		BYTE* buffer = sendBuffer->GetBuffer();
+
+		int sendSize = sizeof(sendData) + sizeof(PacketHeader);
+		((PacketHeader*)buffer)->size = sendSize;
+		((PacketHeader*)buffer)->id = 0;
+		memcpy(&buffer[4], sendData, sizeof(sendData));
+		if (sendBuffer->Close(sendSize))
+		{
+			//전체 다 보내기
+			SessionManager::Get().Broadcast(sendBuffer);
+		}
+
+		//1초에 4번정도 전체 메세지
+		this_thread::sleep_for(250ms);
+	}
+	
+
+	for (int i = 0; i < THREAD_COUNT; i++)
+	{
+		if (threads[i].joinable())
+		{
+			threads[i].join();
+		}
+		
+	}
 
 	return 0;
 

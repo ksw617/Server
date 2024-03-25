@@ -22,7 +22,7 @@ private:
 	//SendEvent 추가
 	SendEvent sendEvent;
 	DisConnectEvent disConnectEvent;
-public:
+private:
 	RecvBuffer recvBuffer;
 	//sendBuffer queue 추가
 	queue<shared_ptr<SendBuffer>> sendQueue;

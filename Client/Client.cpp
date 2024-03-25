@@ -4,59 +4,30 @@
 #include <ClientService.h>
 #include <PacketSession.h>
 #include <IocpCore.h>
-#include <SendBufferManager.h>
 
 char sendData[] = "Hello world";
 
-class ClientSession : public PacketSession
+class ServerSession : public PacketSession
 {
 public:
 	//소멸자 호출
-	~ClientSession()
+	~ServerSession()
 	{
 		printf("ClientSession Destroy\n");
 	}
 	virtual void OnConnected() override
 	{
-		shared_ptr<SendBuffer> sendBuffer = SendBufferManager::Get().Open(4096);
-
-		BYTE* data = sendBuffer->GetBuffer();
-
-		int sendSize = sizeof(PacketHeader) + sizeof(sendData);
-		((PacketHeader*)data)->size = sendSize;
-		((PacketHeader*)data)->id = 0;
-
-		memcpy(&data[4], sendData, sizeof(sendData));
-
-		if (sendBuffer->Close(sendSize))
-		{
-			Send(sendBuffer);
-		}
 	}
 
 	virtual int OnRecvPacket(BYTE* buffer, int len) override
 	{
+		PacketHeader header = *(PacketHeader*)buffer;
 
-		this_thread::sleep_for(1s);
+		BYTE recvBuffer[4096];
 
-		shared_ptr<SendBuffer> sendBuffer = SendBufferManager::Get().Open(4096);
+		memcpy(recvBuffer, &buffer[4], header.size - sizeof(PacketHeader));
 
-		BYTE* data = sendBuffer->GetBuffer();
-
-		//14byte     =    4byte				+		sendData[12]
-		int sendSize = sizeof(PacketHeader) + sizeof(sendData);
-		//[size(2) = sendSize]										4096]
-		((PacketHeader*)data)->size = sendSize;
-		//[size(2) = sendSize][id(2) = 0]							4096]
-		((PacketHeader*)data)->id = 0;
-		//[size(2) = sendSize][id(2) = 0][sendData = "Hello world"NULL]4096]
-		memcpy(&data[4], sendData, sizeof(sendData));
-		//[[size(2)][id(2)][sendData(12)]]
-		if (sendBuffer->Close(sendSize))
-		{
-			Send(sendBuffer);
-		}
-
+		printf("%s\n", recvBuffer);
 
 		return len;
 	}
@@ -73,14 +44,17 @@ public:
 
 };
 
+#define THREAD_COUNT 2
+
 int main()
 {
 	this_thread::sleep_for(1s);
+	printf("============= CLIENT =============\n");
 
-	shared_ptr<Service> service = make_shared<ClientService>(L"127.0.0.1", 27015, []() {return make_shared<ClientSession>(); });
+	shared_ptr<Service> service = make_shared<ClientService>(L"127.0.0.1", 27015, []() {return make_shared<ServerSession>(); });
 
-	//1000명정도 접속 시작
-	for (int i = 0; i < 1; i++)
+
+	for (int i = 0; i < 1000; i++)
 	{
 		if (!service->Start())
 		{
@@ -89,17 +63,30 @@ int main()
 		}
 	}
 
+	vector<thread> threads;
 
-	thread t([=]()
-		{
-			while (true)
+	for (int i = 0; i < THREAD_COUNT; i++)
+	{
+		threads.push_back(thread([=]()
 			{
-				service->GetIocpCore()->ObserveIO();
+				while (true)
+				{
+					service->GetIocpCore()->ObserveIO();
+				}
 			}
-		}
-	);
+		));
+	}
 
-	t.join();
+
+	for (int i = 0; i < THREAD_COUNT; i++)
+	{
+		if (threads[i].joinable())
+		{
+			threads[i].join();
+		}
+
+	}
+	
 
 	return 0;
 }
