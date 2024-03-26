@@ -396,3 +396,10 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Except for these specific ones
+!/protoc/bin/protoc.exe
+!/protoc/bin/PacketGenerator.bat
+!/protoc/bit/*.proto
+
+!Libraries/Libs/Protobuf/
