@@ -5,7 +5,7 @@
 #include <PacketSession.h>
 #include <IocpCore.h>
 
-char sendData[] = "Hello world";
+#include "Protocol.pb.h"
 
 class ServerSession : public PacketSession
 {
@@ -21,13 +21,10 @@ public:
 
 	virtual int OnRecvPacket(BYTE* buffer, int len) override
 	{
-		PacketHeader header = *(PacketHeader*)buffer;
-
-		BYTE recvBuffer[4096];
-
-		memcpy(recvBuffer, &buffer[4], header.size - sizeof(PacketHeader));
-
-		printf("%s\n", recvBuffer);
+		Protocol::TEST packet;
+		packet.ParseFromArray(buffer + sizeof(PacketHeader), len - sizeof(PacketHeader));
+		
+		printf("ID : %d, HP : %d\n", packet.id(), packet.hp());
 
 		return len;
 	}
@@ -54,7 +51,7 @@ int main()
 	shared_ptr<Service> service = make_shared<ClientService>(L"127.0.0.1", 27015, []() {return make_shared<ServerSession>(); });
 
 
-	for (int i = 0; i < 1000; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		if (!service->Start())
 		{
