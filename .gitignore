@@ -400,6 +400,6 @@ FodyWeavers.xsd
 # Except for these specific ones
 !/protoc/bin/protoc.exe
 !/protoc/bin/PacketGenerator.bat
-!/protoc/bit/*.proto
+!/protoc/bin/*.proto
 
 !Libraries/Libs/Protobuf/
