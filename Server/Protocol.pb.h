@@ -179,6 +179,7 @@ class TEST final :
   enum : int {
     kIdFieldNumber = 1,
     kHpFieldNumber = 2,
+    kMpFieldNumber = 3,
   };
   // int32 id = 1;
   void clear_id();
@@ -198,6 +199,15 @@ class TEST final :
   void _internal_set_hp(int32_t value);
   public:
 
+  // int32 mp = 3;
+  void clear_mp();
+  int32_t mp() const;
+  void set_mp(int32_t value);
+  private:
+  int32_t _internal_mp() const;
+  void _internal_set_mp(int32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.TEST)
  private:
   class _Internal;
@@ -208,6 +218,7 @@ class TEST final :
   struct Impl_ {
     int32_t id_;
     int32_t hp_;
+    int32_t mp_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -262,6 +273,26 @@ inline void TEST::_internal_set_hp(int32_t value) {
 inline void TEST::set_hp(int32_t value) {
   _internal_set_hp(value);
   // @@protoc_insertion_point(field_set:Protocol.TEST.hp)
+}
+
+// int32 mp = 3;
+inline void TEST::clear_mp() {
+  _impl_.mp_ = 0;
+}
+inline int32_t TEST::_internal_mp() const {
+  return _impl_.mp_;
+}
+inline int32_t TEST::mp() const {
+  // @@protoc_insertion_point(field_get:Protocol.TEST.mp)
+  return _internal_mp();
+}
+inline void TEST::_internal_set_mp(int32_t value) {
+  
+  _impl_.mp_ = value;
+}
+inline void TEST::set_mp(int32_t value) {
+  _internal_set_mp(value);
+  // @@protoc_insertion_point(field_set:Protocol.TEST.mp)
 }
 
 #ifdef __GNUC__

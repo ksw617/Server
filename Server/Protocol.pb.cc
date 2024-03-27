@@ -25,6 +25,7 @@ PROTOBUF_CONSTEXPR TEST::TEST(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.id_)*/0
   , /*decltype(_impl_.hp_)*/0
+  , /*decltype(_impl_.mp_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct TESTDefaultTypeInternal {
   PROTOBUF_CONSTEXPR TESTDefaultTypeInternal()
@@ -49,6 +50,7 @@ const uint32_t TableStruct_Protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::TEST, _impl_.id_),
   PROTOBUF_FIELD_OFFSET(::Protocol::TEST, _impl_.hp_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::TEST, _impl_.mp_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::Protocol::TEST)},
@@ -59,12 +61,12 @@ static const ::_pb::Message* const file_default_instances[] = {
 };
 
 const char descriptor_table_protodef_Protocol_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\016Protocol.proto\022\010Protocol\"\036\n\004TEST\022\n\n\002id"
-  "\030\001 \001(\005\022\n\n\002hp\030\002 \001(\005b\006proto3"
+  "\n\016Protocol.proto\022\010Protocol\"*\n\004TEST\022\n\n\002id"
+  "\030\001 \001(\005\022\n\n\002hp\030\002 \001(\005\022\n\n\002mp\030\003 \001(\005b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_Protocol_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Protocol_2eproto = {
-    false, false, 66, descriptor_table_protodef_Protocol_2eproto,
+    false, false, 78, descriptor_table_protodef_Protocol_2eproto,
     "Protocol.proto",
     &descriptor_table_Protocol_2eproto_once, nullptr, 0, 1,
     schemas, file_default_instances, TableStruct_Protocol_2eproto::offsets,
@@ -97,12 +99,13 @@ TEST::TEST(const TEST& from)
   new (&_impl_) Impl_{
       decltype(_impl_.id_){}
     , decltype(_impl_.hp_){}
+    , decltype(_impl_.mp_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   ::memcpy(&_impl_.id_, &from._impl_.id_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.hp_) -
-    reinterpret_cast<char*>(&_impl_.id_)) + sizeof(_impl_.hp_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.mp_) -
+    reinterpret_cast<char*>(&_impl_.id_)) + sizeof(_impl_.mp_));
   // @@protoc_insertion_point(copy_constructor:Protocol.TEST)
 }
 
@@ -113,6 +116,7 @@ inline void TEST::SharedCtor(
   new (&_impl_) Impl_{
       decltype(_impl_.id_){0}
     , decltype(_impl_.hp_){0}
+    , decltype(_impl_.mp_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -141,8 +145,8 @@ void TEST::Clear() {
   (void) cached_has_bits;
 
   ::memset(&_impl_.id_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.hp_) -
-      reinterpret_cast<char*>(&_impl_.id_)) + sizeof(_impl_.hp_));
+      reinterpret_cast<char*>(&_impl_.mp_) -
+      reinterpret_cast<char*>(&_impl_.id_)) + sizeof(_impl_.mp_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -164,6 +168,14 @@ const char* TEST::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
           _impl_.hp_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 mp = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.mp_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -209,6 +221,12 @@ uint8_t* TEST::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteInt32ToArray(2, this->_internal_hp(), target);
   }
 
+  // int32 mp = 3;
+  if (this->_internal_mp() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(3, this->_internal_mp(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -235,6 +253,11 @@ size_t TEST::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_hp());
   }
 
+  // int32 mp = 3;
+  if (this->_internal_mp() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_mp());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -259,6 +282,9 @@ void TEST::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_
   if (from._internal_hp() != 0) {
     _this->_internal_set_hp(from._internal_hp());
   }
+  if (from._internal_mp() != 0) {
+    _this->_internal_set_mp(from._internal_mp());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -277,8 +303,8 @@ void TEST::InternalSwap(TEST* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(TEST, _impl_.hp_)
-      + sizeof(TEST::_impl_.hp_)
+      PROTOBUF_FIELD_OFFSET(TEST, _impl_.mp_)
+      + sizeof(TEST::_impl_.mp_)
       - PROTOBUF_FIELD_OFFSET(TEST, _impl_.id_)>(
           reinterpret_cast<char*>(&_impl_.id_),
           reinterpret_cast<char*>(&other->_impl_.id_));
