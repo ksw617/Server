@@ -5,7 +5,7 @@
 #include <PacketSession.h>
 #include <IocpCore.h>
 
-#include "Protocol.pb.h"
+#include "ServerPacketHandler.h"
 
 class ServerSession : public PacketSession
 {
@@ -21,11 +21,8 @@ public:
 
 	virtual int OnRecvPacket(BYTE* buffer, int len) override
 	{
-		Protocol::TEST packet;
-		packet.ParseFromArray(buffer + sizeof(PacketHeader), len - sizeof(PacketHeader));
+		ServerPacketHandler::HandlePacket(buffer, len);
 		
-		printf("ID : %d, HP : %d\n", packet.id(), packet.hp());
-
 		return len;
 	}
 

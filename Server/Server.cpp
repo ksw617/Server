@@ -8,6 +8,8 @@
 
 #include "Protocol.pb.h"
 
+#include "ClientPacketHandler.h"
+
 
 #define THREAD_COUNT 5
 
@@ -40,22 +42,12 @@ int main()
 
 	while (true)
 	{
-		Protocol::TEST	packet;
-		packet.set_id(1);
-		packet.set_hp(100);
+		Protocol::S_LOGIN	packet;
 
-		uint16 dataSize = (uint16)packet.ByteSizeLong();
-		uint16 packetSize = dataSize + sizeof(PacketHeader);
+		shared_ptr<SendBuffer> sendBuffer = ClientPacketHandler::MakeSendBuffer(packet);
 
-		shared_ptr<SendBuffer> sendBuffer = SendBufferManager::Get().Open(4096);
-		BYTE* buffer = sendBuffer->GetBuffer();
-		((PacketHeader*)buffer)->size = packetSize;
-		((PacketHeader*)buffer)->id = 0;
-
-		packet.SerializeToArray(&buffer[4], dataSize);
-		if (sendBuffer->Close(packetSize))
+		if (sendBuffer != nullptr)
 		{
-
 			SessionManager::Get().Broadcast(sendBuffer);
 		}
 

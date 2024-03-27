@@ -31,6 +31,9 @@
     <ClCompile Include="Protocol.pb.cc">
       <Filter>Main\Protocol</Filter>
     </ClCompile>
+    <ClCompile Include="ClientPacketHandler.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -44,6 +47,9 @@
     </ClInclude>
     <ClInclude Include="Protocol.pb.h">
       <Filter>Main\Protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientPacketHandler.h">
+      <Filter>Main</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
